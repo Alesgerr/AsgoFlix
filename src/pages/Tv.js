@@ -28,7 +28,7 @@ const Tv = () => {
 
   const handleSortChange = (value) => {
     setSortBy(value);
-    setPage(1); // Yeni bir sıralama seçildiğinde sayfayı sıfırla
+    setPage(1);
   };
 
   return (
