@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* #root {
+   background-color: #000 !important;
+   color: #fff !important;
+} */
+.dark {
+  background-color: #000;
+  color: #fff;
+}
+.slick-slide > div {
+  margin: 0 5px;
+}
+
+.slick-prev {
+  left: -20px !important;
+}
+.slick-next {
+  right: -20px !important;
+}
+.slick-prev:before,
+.slick-next:before {
+  color: #df1c1c !important;
+}
