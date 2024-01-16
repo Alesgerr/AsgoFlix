@@ -39,16 +39,17 @@ console.log(movieData);
          movieData && (
             <> 
             <div className="banner" style={{backgroundImage: `url(https://image.tmdb.org/t/p/original/${backdrop_path})`}}>
+               <div className="absolute inset-0 bg-black opacity-40"></div>
                <div className="mb-3 movie-content">
                   <div className="movie-content__poster flex flex-col justify-center mt-5 h-screen">
-                     <div className="movie-content__poster__img h" style={{backgroundImage: `url(https://image.tmdb.org/t/p/original/${backdrop_path})`}}></div>
+                     <div className="movie-content__poster__img h-96 rounded-md" style={{backgroundImage: `url(https://image.tmdb.org/t/p/original/${backdrop_path})`}}></div>
                   </div>
                   <div className="movie-content__info text-white font-bold">
                      <h1 className="title">{title}</h1>
                      <div className="genres">{genres && genres.slice(0, 5).map((genre, i) => (
                         <span key={i} className="genres__item">{genre.name}</span>))}
                      </div>
-                     <div className="flex items-center justify-center"><FaStar className="me-2 text-yellow-400"/> {vote_average.toFixed(2)}</div>
+                     <div className="flex items-center"><FaStar className="me-2 text-yellow-400"/> {vote_average.toFixed(2)}</div>
                      <p>{overview}</p>
 
                      <div className="cast">

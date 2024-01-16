@@ -1,10 +1,11 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Tv = () => {
   const [movieData, setMovieData] = useState([]);
-  const [sortBy, setSortBy] = useState("sort"); // Default sıralama
+  const [sortBy, setSortBy] = useState("vote_average.desc");
   const [page, setPage] = useState(1);
 
   const fetchData = async () => {
@@ -12,11 +13,29 @@ const Tv = () => {
       const res = await axios.get(
         `https://api.themoviedb.org/3/discover/tv?api_key=f345faa446485deffb377e9fe52e2792&include_adult=false&include_null_first_air_dates=false&language=en-US&page=${page}&sort_by=${sortBy}`
       );
-      setMovieData(res.data.results);
+
+      const zeroRatingMovies = res.data.results.filter(movie => movie.vote_average === 0);
+
+      const otherMovies = res.data.results.filter(movie => movie.vote_average !== 0);
+
+      let sortedMovies = [];
+      if (sortBy === 'vote_average.desc') {
+        sortedMovies = [...otherMovies.sort((a, b) => b.vote_average - a.vote_average), ...zeroRatingMovies];
+      } else if (sortBy === 'vote_average.asc') {
+        sortedMovies = [...otherMovies.sort((a, b) => a.vote_average - b.vote_average), ...zeroRatingMovies];
+      } else if (sortBy === 'first_air_date.desc') {
+        sortedMovies = [...otherMovies.sort((a, b) => new Date(b.first_air_date) - new Date(a.first_air_date)), ...zeroRatingMovies];
+      } else if (sortBy === 'first_air_date.asc') {
+        sortedMovies = [...otherMovies.sort((a, b) => new Date(a.first_air_date) - new Date(b.first_air_date)), ...zeroRatingMovies];
+      }
+
+      setMovieData(sortedMovies);
+
     } catch (error) {
       console.error("Axios request error:", error);
     }
   };
+
 
   useEffect(() => {
     fetchData();
@@ -39,7 +58,7 @@ const Tv = () => {
           onChange={(e) => handleSortChange(e.target.value)}
           className="mr-4 p-2 border rounded dark:bg-black"
         >
-          <option value="">Sort</option>
+          <option disabled value='sort'>Sort</option>
           <option value="vote_average.desc">High to Low Rating</option>
           <option value="vote_average.asc">Low to High Rating</option>
           <option value="first_air_date.asc">Oldest to Newest</option>
@@ -63,10 +82,8 @@ const Tv = () => {
       </div>
       <div className="tvCard flex flex-wrap justify-center gap-4 cursor-pointer">
         {movieData?.map((dt, i) => (
-          <div
-            className="relative w-36 lg:w-72 hover:scale-105 transition-transform"
-            key={i}
-          >
+          <div className="relative w-36 lg:w-72 hover:scale-105 transition-transform"key={i}>
+            <Link to={`/tv/${dt.id}`}>
             <div className="relative">
               <img
                 className="object-cover rounded-xl h-56"
@@ -91,6 +108,7 @@ const Tv = () => {
                 </div>
               </div>
             </div>
+            </Link>
           </div>
         ))}
       </div>

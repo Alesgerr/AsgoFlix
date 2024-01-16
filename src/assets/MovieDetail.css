@@ -55,8 +55,8 @@
    background-position: center;
    background-size: cover;
    background-repeat: no-repeat;
-   border-radius: 0.5em;
-   padding-top: 165%;
+   /* border-radius: 0.5em; */
+   /* padding-top: 16%; */
  }
  
  .movie-content__info {
@@ -82,9 +82,9 @@
    line-height: 1;
  }
  
- .movie-content__info .genres > * ~ * {
+ /* .movie-content__info .genres > * ~ * {
    margin-left: 0.5rem;
- }
+ } */
  
  .movie-content__info .genres__item {
    padding: 0.5rem 1.5rem;
