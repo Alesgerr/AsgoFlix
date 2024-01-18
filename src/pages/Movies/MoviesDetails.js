@@ -80,7 +80,7 @@ const MoviesDetails = () => {
             <div className="banner" /*style={{backgroundImage: `url(https://image.tmdb.org/t/p/original/${backdrop_path})`}}*/>
                <div className="absolute inset-0 dark:bg-black text-black"></div>
                <div className="mb-3  md:flex lg:flex movie-content">
-                  <div className="relative movie-content__poster ">
+                  <div className="relative movie-content__poster flex justify-center">
                      <div className="pt-5 max-w-80">
                         <img className="rounded-xl details_img" src={`https://image.tmdb.org/t/p/original/${poster_path ? poster_path : backdrop_path}`} alt="" />
                      </div>

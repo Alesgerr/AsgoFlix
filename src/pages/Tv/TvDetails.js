@@ -126,7 +126,7 @@ const TvDetails = () => {
           <div
             className="banner container mx-auto overflow-hidden" /*</>style={{backgroundImage: `url(https://image.tmdb.org/t/p/original/${backdrop_path})`}} */>
             <div className="mb-3 movie-content md:flex lg:flex text-black">
-              <div className="relative movie-content__poster">
+              <div className="relative movie-content__poster flex justify-center">
                 <div className="pt-5 max-w-80">
                   <img className="rounded-xl details_img" src={`https://image.tmdb.org/t/p/original/${poster_path ? poster_path : backdrop_path}`} alt="" />
                 </div>
