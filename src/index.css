@@ -12,7 +12,9 @@
 .slick-slide > div {
   margin: 0 5px;
 }
-
+.slick-arrow {
+  display: none !important;
+}
 .slick-prev {
   left: -20px !important;
 }
@@ -24,5 +26,9 @@
   color: #df1c1c !important;
 }
 
-
+.pagination {
+  background: beige;
+  border-radius: 12px;
+  padding: 1rem 1rem;
+}
 /*  */

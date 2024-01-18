@@ -7,7 +7,6 @@ const Movies = () => {
   const [movieData, setMovieData] = useState([]);
   const [sortBy, setSortBy] = useState("vote_average.desc");
   const [page, setPage] = useState(1);
-  //  console.log(movieData);
 
    const fetchData = async () => {
       try {
@@ -117,7 +116,7 @@ const Movies = () => {
           </div>
         ))}
       </div>
-      <div className="flex flex-1 justify-end mt-3">
+      <div className="flex flex-1 justify-end mt-3 px-3 py-5">
           <button
             onClick={() => handlePageChange(page - 1)}
             disabled={page === 1}

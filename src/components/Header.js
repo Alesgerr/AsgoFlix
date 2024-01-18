@@ -43,6 +43,16 @@ const Header = () => {
           Movies
         </NavLink>
       </Typography>
+      <Typography
+        as="li"
+        variant="small"
+        color="blue-gray"
+        className="flex items-center gap-x-2 p-1 font-medium"
+      >
+        <NavLink to="/categories" className="flex items-center">
+          Categories
+        </NavLink>
+      </Typography>
     </ul>
   );
   useEffect(() => {
@@ -86,7 +96,7 @@ const Header = () => {
   };
 
   return (
-    <Navbar className={`${openNav ? 'dark:bg-black dark:text-white' : 'bg-white'}bg-transparent ml-2 mr-2 mx-auto dark:text-white dark:shadow-gray-900 dark:shadow-sm shadow-md dark:border-hidden border-hidden text-black px-4 py-2 lg:px-8 lg:py-4 relative z-50`}>
+    <Navbar className={`${openNav ? 'dark:bg-black' : 'bg-white'} dark:text-white rounded-none bg-transparent ml-2 mr-2 mx-auto dark:shadow-gray-900 dark:shadow-sm shadow-md dark:border-hidden border-hidden text-black px-4 py-2 lg:px-8 lg:py-4 relative z-50`}>
       <div className="container mx-auto flex flex-wrap lg:items-center justify-between text-blue-gray-900">
         <Typography
           as="a"
@@ -116,7 +126,7 @@ const Header = () => {
               }}
             />
             <div className="!absolute left-2 top-[12px]">
-              <CiSearch className="dark:text-black" />
+              <CiSearch />
             </div>
           </div>
           <Button
@@ -184,7 +194,7 @@ const Header = () => {
                 }}
               />
               <div className="!absolute left-2 top-[12px]">
-                <CiSearch className="dark:text-black" />
+                <CiSearch />
               </div>
             </div>
             <Button

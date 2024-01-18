@@ -1,133 +1,216 @@
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
+import "../../assets/MovieDetail.css";
+import Slider from "react-slick";
 
 const TvDetails = () => {
-   const {id} = useParams()
-   const [movieData, setMovieData] = useState()
-   const [seasonData, setSeasonData] = useState([]);
-   const [sortBy, setSortBy] = useState("sort");
+  const { id } = useParams();
+  const [movieData, setMovieData] = useState();
+  const [seasonData, setSeasonData] = useState([]);
+  const [sortBy, setSortBy] = useState("sort");
+  const [castData, setCastData] = useState({});
 
-   const fetchData = async () => {
+  const fetchData = async () => {
+    const apiKey = "f345faa446485deffb377e9fe52e2792";
+
+    const res = await axios.get(
+      `https://api.themoviedb.org/3/tv/${id}?api_key=${apiKey}&language=en-US`
+    );
+    setMovieData(res.data);
+    setSeasonData(res.data.seasons);
+  };
+  const fetchCredits = async () => {
+    try {
       const apiKey = "f345faa446485deffb377e9fe52e2792";
+      const res = await axios.get(
+        `https://api.themoviedb.org/3/tv/${id}/credits?api_key=${apiKey}&language=en-US`
+      );
+      setCastData(res.data);
+    } catch (error) {
+      console.error("Fetch credits error:", error);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+    fetchCredits();
+  }, [id]);
+  const {
+    budget,
+    backdrop_path,
+    poster_path,
+    languages,
+    production_companies,
+    production_countries,
+    release_date,
+    name,
+    vote_average,
+    overview,
+    popularity,
+    first_air_date,
+    last_air_date,
+    original_language,
+    genres,
+    video,
+    seasons,
+  } = movieData || {};
 
-      const res = await axios.get(`https://api.themoviedb.org/3/tv/${id}?api_key=${apiKey}&language=en-US`)
-      setMovieData(res.data)
-      setSeasonData(res.data.seasons)
-      console.log(res);
-   }
-   useEffect(() => {
-      fetchData()
-   },[id])
-   const {
-      budget,
-      backdrop_path,
-      poster_path,
-      languages,
-      production_companies,
-      production_countries,
-      release_date,
-      name,
-      vote_average,
-      overview,
-      popularity,
-      first_air_date,
-      last_air_date,
-      original_language,
-      genres,
-      video,
-      seasons,
-      
-    } = movieData || {};
+  const handleSortChange = (value) => {
+    setSortBy(value);
+  };
+  const renderSeasons = () => {
+    let sortedSeasons = [...seasonData];
 
-    const handleSortChange = (value) => {
-      setSortBy(value);
-    };
-    const renderSeasons = () => {
-      let sortedSeasons = [...seasonData];
-  
-      if (sortBy === "first_air_date.desc") {
-        sortedSeasons = sortedSeasons.sort((a, b) => new Date(b.air_date) - new Date(a.air_date));
-      } else if (sortBy === "first_air_date.asc") {
-        sortedSeasons = sortedSeasons.sort((a, b) => new Date(a.air_date) - new Date(b.air_date));
-      }
-      console.log(sortedSeasons);
-      return sortedSeasons.map((season, index) => (
-        <div key={index} className="bg-gray-800 p-4 mt-10 rounded-md w-28 md:w-  lg:w-40">
-          <h3 className="text-2xl font-bold">{season.name}</h3>
-          {/* <p className="text-gray-400">Air Date: {season.air_date}</p> */}
-          <p className="text-gray-400">Episode Count: {season.episode_count}</p>
-          {/* <p className="text-gray-400">Vote Average: {season.vote_average}</p> */}
+    if (sortBy === "first_air_date.desc") {
+      sortedSeasons = sortedSeasons.sort(
+        (a, b) => new Date(b.air_date) - new Date(a.air_date)
+      );
+    } else if (sortBy === "first_air_date.asc") {
+      sortedSeasons = sortedSeasons.sort(
+        (a, b) => new Date(a.air_date) - new Date(b.air_date)
+      );
+    }
+    return sortedSeasons.map((season, index) => (
+      <div key={index} className="bg-gray-800 p-4 rounded-md lg:w-36">
+        <h3 className="md:text-1x1 lg:text-1xl font-bold text-white">{season.name}</h3>
+        {/* <p className="text-gray-400">Air Date: {season.air_date}</p> */}
+        <p className="text-gray-400 flex">Episode {season.episode_count}</p>
+        {/* <p className="text-gray-400">Vote Average: {season.vote_average}</p> */}
+        <div className="flex items-center">
+         <FaStar className="text-yellow-400"/>
+         <span className="ml-1">{season.vote_average}</span>
         </div>
-      ));
-    };
-  return (
-   <>
+      </div>
+    ));
+  };
+
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 4,
+    responsive: [
       {
-         movieData && (
-            <> 
-               <div className="banner" style={{backgroundImage: `url(https://image.tmdb.org/t/p/original/${backdrop_path})`}}>
-                  <div className="absolute inset-0 bg-black opacity-40"></div>
-                  <div className="mb-3 movie-content">
-                  {/* <div className="mt-24">
-                     <label className="text-gray-400">Sort By:</label>
-                     <select
-                        value={sortBy}
-                        onChange={(e) => handleSortChange(e.target.value)}
-                        className="ml-2 p-2 border rounded dark:bg-black"
-                     >
-                        <option value="sort">Sort</option>
-                        <option value="first_air_date.desc">Newest to Oldest</option>
-                        <option value="first_air_date.asc">Oldest to Newest</option>
-                     </select>
-                  </div> */}
-                     <div className="relative movie-content__poster flex flex-col justify-center h-screen">
-                     
-                        <div className="movie-content__poster__img rounded-md h-96 w-full" style={{backgroundImage: `url(https://image.tmdb.org/t/p/original/${backdrop_path})`}}></div>
-                        {/* <div className="absolute inset-0 rounded-md bg-black opacity-50"></div> */}
-                     </div>
-                     
-                     <div className="movie-content__info  text-white font-bold">
-                        <div className="flex items-center justify-between">
-                        
-                        <div>
-                           <h1 className='text-2xl font-bold'>{name}</h1>
-                           <div className='mt-2 mb-2'>{first_air_date} || {last_air_date}</div>
-                           <div>Seasons {seasons.length}</div>
-                           
-                        </div>
-                        {/* ({languages}) */}
-                        </div>
-                        <div className="genres flex flex-wrap items-center gap-1">{genres && genres.slice(0, 5).map((genre, i) => (
-                           <span key={i} className="genres__item">{genre.name}</span>))}
-                        </div>
-                        <div className="flex items-center"><FaStar className="me-2 text-yellow-400"/> {vote_average.toFixed(2)}</div>
-                        <div className="season">
-                           <div className='flex flex-wrap gap-1'>{renderSeasons()}</div>
-                        </div>
-                        <p>{overview}</p>
-                        <div className='flex gap-2'>
-                              {production_companies?.map(item => (
-                                 <div className='' key={item.id}>
-                                    <div className=''>
-                                       <img className='w-32 h-10 object-contain' src={`https://image.tmdb.org/t/p/original/${item.logo_path}`} alt="" />
-                                    </div>
-                                    <div className='text-center'>{item.name}</div>
-                                 </div>
-                              ))}
-                           </div>
-                        <div className="cast">
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 4,
+          infinite: true,
+          dots: true,
+        },
+      },
 
-                        </div>
-                     </div>
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+        },
+      },
+    ],
+  };
+  return (
+    <>
+      {movieData && (
+        <>
+          <div
+            className="banner container mx-auto overflow-hidden" /*</>style={{backgroundImage: `url(https://image.tmdb.org/t/p/original/${backdrop_path})`}} */>
+            <div className="mb-3 movie-content md:flex lg:flex text-black">
+              <div className="relative movie-content__poster">
+                <div className="pt-5 max-w-80">
+                  <img className="rounded-xl details_img" src={`https://image.tmdb.org/t/p/original/${poster_path ? poster_path : backdrop_path}`} alt="" />
+                </div>
+              </div>
+              <div className="movie-content__info flex flex-col justify-center  sm:mb-0 md:mb-0 lg:mb-0 md:pl-4 lg:pl-6 dark:text-white font-bold">
+                <div className="flex items-center justify-between">
+                  <div className="movieContentDiv">
+                    <h1 className="text-2xl font-bold movieContentDiv">
+                      {name}
+                    </h1>
+                    <div className="mt-2 mb-2 movieContentDiv">
+                      {first_air_date === last_air_date
+                        ? "Publication Date: " + first_air_date
+                        : first_air_date}{" "}
+                      {last_air_date === first_air_date
+                        ? ""
+                        : "| " + last_air_date}
+                    </div>
+                    <div>Seasons {seasons.length}</div>
                   </div>
-               </div>
-            </>
-         )
-      }
-  </>
-  )
-}
+                  {/* ({languages}) */}
+                </div>
+                <div className="genres flex flex-wrap items-center gap-1 text-white movieContentDiv">
+                  {genres &&
+                    genres.slice(0, 5).map((genre, i) => (
+                      <div key={i}>
+                        <span key={i} className="genres__item">
+                          {genre.name}
+                        </span>
+                      </div>
+                    ))}
+                </div>
+                <div className="flex items-center movieContentDiv">
+                  <FaStar className="me-2 text-yellow-400" />{" "}
+                  {vote_average.toFixed(2)}
+                </div>
+                <div className="season">
+                  <div className='flex flex-wrap gap-1'>{renderSeasons()}</div>
+                </div>
+                <p className="movieContentDiv">{overview}</p>
+                <div className="cast movieContentDiv">
+                  <Slider {...settings}>
+                    {castData.cast?.map((dt) => (
+                      <div
+                        key={dt.id}
+                        className="rounded-md overflow-hidden shadow-md"
+                      >
+                        <Link to={`/actor-details/${dt.id}`}>
+                          <div className="relative">
+                            <div className="relative movieContentDiv flex justify-center">
+                              {dt.profile_path ? (
+                                <img
+                                  className="inset-0  h-24 w-24 object-cover rounded-full"
+                                  src={`https://image.tmdb.org/t/p/w300/${dt?.profile_path}`}
+                                />
+                              ) : (
+                                <img
+                                  className="inset-0  h-24 w-24 object-cover rounded-full"
+                                  width={200}
+                                  height={200}
+                                  src={
+                                    "https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg"
+                                  }
+                                />
+                              )}
+                            </div>
+                            <div className="p-4 movieContentDiv text-center ">
+                              <div className="actor_name">
+                                 <h4 className="text-md font-semibold">{dt?.name}</h4>
+                              </div>
+                              </div>
+                          </div>
+                        </Link>
+                      </div>
+                    ))}
+                  </Slider>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+    </>
+  );
+};
 
-export default TvDetails
+export default TvDetails;

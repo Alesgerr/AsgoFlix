@@ -24,7 +24,6 @@ const PeopleDetails = () => {
       `https://api.themoviedb.org/3/person/${id}/movie_credits?api_key=${apiKey}&language=en-US`
     );
     setMovieCredits(res.data);
-    console.log(res);
   };
   useEffect(() => {
     fetchData();
@@ -40,50 +39,59 @@ const PeopleDetails = () => {
   //      <span>{peopleData.place_of_birth}</span>
   //    </div>
   //  </div>
+  const totalSlides = 4;
+
   const settings = {
     dots: false,
-    infinite: true,
     speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 4,
+    slidesToShow: 4, // Toplam slayt sayısını kullanabilirsiniz
+    slidesToScroll: 1, // Kaydırma işlemi gerçekleştiğinde bir slayt kaydır
+    focusOnSelect: false,
     responsive: [
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 4,
-          slidesToScroll: 4,
-          infinite: true,
-          dots: true,
+          slidesToShow: Math.min(3, totalSlides),
+          slidesToScroll: 1,
+          dots: false,
         },
       },
       {
         breakpoint: 600,
         settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-          initialSlide: 2,
+          slidesToShow: Math.min(2, totalSlides),
+          slidesToScroll: 1,
+          initialSlide: 0,
         },
       },
       {
         breakpoint: 480,
         settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
+          slidesToShow: Math.min(1, totalSlides),
+          slidesToScroll: 1,
         },
       },
     ],
   };
+  // const uniqueMovies = Array.from(new Set([...movieCredits.cast, ...movieCredits.crew].map(movie => movie.id)))
+  // .map(id => {
+  //   return [...movieCredits.cast, ...movieCredits.crew].find(movie => movie.id === id);
+  // });
   return (
    <div className="container mx-auto mt-10 p-4 overflow-hidden">
    {peopleData && (
      <>
        <div className="md:p-8 flex flex-col lg:justify-center md:flex-row">
-         <div className="w-full md:w-1/4 lg:w-1/4 mb-4 md:mb-0">
-            <img
-            src={`https://image.tmdb.org/t/p/original/${peopleData.profile_path}`}
-            alt={peopleData.name}
-            className="rounded-lg w-full"
-            />
+         <div className="w-full md:w-1/2 lg:w-1/5 mb-4 md:mb-0">
+            {peopleData.profile_path ? <img
+              src={`https://image.tmdb.org/t/p/original/${peopleData?.profile_path}`}
+              alt={peopleData.name}
+              className="w-full h-72 object-cover rounded-md"
+            /> :  <img
+              src={'https://thinksport.com.au/wp-content/uploads/2020/01/avatar-.jpg'}
+              alt={peopleData.name}
+              className="w-full h-48 object-cover rounded-md"
+            />}
          </div>
          <div className="flex flex-col justify-center md:w-2/3 md:px-4">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3">
@@ -149,28 +157,30 @@ const PeopleDetails = () => {
          {/* Cast Slider */}
          {movieCredits.cast.length > 0 && (
            <div className="mb-6">
-             <h3 className="text-lg font-semibold mb-2">Cast</h3>
              <Slider {...settings}>
                {movieCredits.cast.map((movie) => (
                  <div
-                   key={movie.id}
-                   className="bg-white rounded-md overflow-hidden shadow-md"
+                   key={movie?.id}
+                   className="rounded-md overflow-hidden shadow-md"
                  >
-                   <Link to={`/movies/${movie.id}`}>
-                     <div>
-                        <img
-                           src={`https://image.tmdb.org/t/p/w300/${movie.poster_path}`}
-                           alt={movie.title}
-                           className="w-full h-48 object-cover"
-                        />
+                   <Link to={`/movies/${movie?.id}`}>
+                     <div className="relative">
+                        <div className="relative">
+                          <img
+                            src={`https://image.tmdb.org/t/p/w300/${movie?.poster_path}`}
+                            alt={movie?.title}
+                            className="w-full h-48 object-cover rounded-md"
+                          />
+                          <div className="absolute inset-0 bg-black opacity-50 rounded-md"></div>
+                        </div>
                         <div className="p-4">
-                           <h4 className="text-lg font-semibold mb-2">
-                           {movie.title}
+                           <h4 className="text-lg font-semibold mb-5">
+                            {movie.title.length > 50 ? movie.title.slice(20) + "..." : movie.title}
                            </h4>
-                           <p className="text-gray-600">{movie.character}</p>
-                           <div className="flex items-center mt-2">
-                           <FaStar className="text-yellow-500 mr-1" />
-                           {movie.vote_average.toFixed(1)}
+                           {/* <p className="text-gray-600">{movie?.character}</p> */}
+                           <div className="flex items-center mt-2 absolute top-2 right-5 text-white">
+                              <FaStar className="text-yellow-500 mr-1" />
+                              {movie?.vote_average.toFixed(1)}
                            </div>
                         </div>
                      </div>
@@ -182,32 +192,35 @@ const PeopleDetails = () => {
          )}
  
          {/* Crew Slider */}
-         {movieCredits.crew.length > 0 && (
+         {movieCredits.crew.length > 3 && (
            <div>
-             <h3 className="text-lg font-semibold mb-2">Crew</h3>
              <Slider {...settings}>
                {movieCredits.crew.map((movie) => (
-                 <div
-                   key={movie.id}
-                   className="bg-white rounded-md overflow-hidden shadow-md"
+                <div
+                   key={movie?.id}
+                   className="rounded-md overflow-hidden shadow-md flex flex-1"
                  >
-                   <Link to={`/movies/${movie.id}`}>
-                     <div>
-                        <img
-                        src={`https://image.tmdb.org/t/p/w300/${movie.poster_path || movie.backdrop_path}`}
-                        alt={movie.title}
-                        className="w-full h-48 object-cover"
-                     />
-                     <div className="p-4">
-                        <h4 className="text-lg font-semibold mb-2">
-                        {movie.title}
-                        </h4>
-                        <p className="text-gray-600">{movie.department}</p>
-                        <div className="flex items-center mt-2">
-                        <FaStar className="text-yellow-500 mr-1" />
-                        {movie.vote_average.toFixed(1)}
+                   <Link to={`/movies/${movie?.id}`}>
+                     <div className="relative">
+                        <div className="relative">
+                          <img
+                            src={`https://image.tmdb.org/t/p/w300/${movie?.poster_path}`}
+                            alt={movie?.title}
+                            className="w-full h-48 object-cover rounded-md"
+                          />
+                          <div className="absolute inset-0 bg-black opacity-50 rounded-md"></div>
                         </div>
-                     </div>
+
+                        <div className="p-4">
+                           <h4 className="text-lg font-semibold mb-5">
+                           {movie.title.length > 50 ? movie.title.slice(20) + "..." : movie.title}
+                           </h4>
+                           {/* <p className="text-gray-600">{movie?.character}</p> */}
+                           <div className="flex items-center mt-2 absolute top-2 right-5 text-white">
+                              <FaStar className="text-yellow-500 mr-1" />
+                              {movie?.vote_average.toFixed(1)}
+                           </div>
+                        </div>
                      </div>
                    </Link>
                  </div>

@@ -112,7 +112,7 @@ const Tv = () => {
           </div>
         ))}
       </div>
-      <div className="flex flex-1 justify-end mt-3">
+      <div className="flex flex-1 justify-end mt-3 px-3 py-5">
           <button
             onClick={() => handlePageChange(page - 1)}
             disabled={page === 1}

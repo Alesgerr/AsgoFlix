@@ -7,7 +7,7 @@ import { FaStar } from "react-icons/fa";
 const MovieDetails = () => {
   const { id } = useParams();
   const [movieData, setMovieData] = useState();
-console.log(movieData);
+
   useEffect(() => {
     const fetchData = async () => {
       const apiKey = "f345faa446485deffb377e9fe52e2792";
@@ -40,8 +40,8 @@ console.log(movieData);
             <> 
             <div className="banner" style={{backgroundImage: `url(https://image.tmdb.org/t/p/original/${backdrop_path})`}}>
                <div className="absolute inset-0 bg-black opacity-40"></div>
-               <div className="mb-3 movie-content">
-                  <div className="movie-content__poster flex flex-col justify-center mt-5 h-screen">
+               <div className="mb-3 lg:flex movie-content">
+                  <div className="movie-content__poster lg:flex lg:flex-col lg:justify-center mt-5 h-screen">
                      <div className="movie-content__poster__img h-96 rounded-md" style={{backgroundImage: `url(https://image.tmdb.org/t/p/original/${backdrop_path})`}}></div>
                   </div>
                   <div className="movie-content__info text-white font-bold">
