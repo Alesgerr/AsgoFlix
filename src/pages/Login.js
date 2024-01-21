@@ -9,14 +9,13 @@ const Login = () => {
    const navigate = useNavigate()
    const {currentUser} = useAuth()
    console.log(currentUser);
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault()
     try {
       const user = await login(email, password);
       // Kayıt başarılı, giriş yapılabilir veya başka bir sayfaya yönlendirilebilir
       console.log("User registered:", user);
-      if(currentUser) {
-         navigate('/')
-      }
+      navigate('/')
     } catch (error) {
       // Kayıt başarısız, hata mesajını göster
       console.error("Registration failed:", error.message);
@@ -37,7 +36,6 @@ const Login = () => {
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <form className="space-y-6" onSubmit={handleLogin}>
-         
           <div>
             <label
               htmlFor="email"

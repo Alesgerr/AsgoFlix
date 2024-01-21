@@ -29,30 +29,19 @@ const PeopleDetails = () => {
     fetchData();
     fetchPersonMovieCredits();
   }, [id]);
-  //    <div className="grid grid-cols-2 gap-4 mb-5">
-  //    <div>
-  //      <span className="text-gray-700 font-semibold">Birthday:</span>
-  //      <span>{peopleData.birthday}</span>
-  //    </div>
-  //    <div>
-  //      <span className="text-gray-700 font-semibold">Place of Birth:</span>
-  //      <span>{peopleData.place_of_birth}</span>
-  //    </div>
-  //  </div>
-  const totalSlides = 4;
 
   const settings = {
     dots: false,
     speed: 500,
     slidesToShow: 4,
-    slidesToScroll: 1, 
+    slidesToScroll: 4, 
     focusOnSelect: false,
     responsive: [
       {
         breakpoint: 1024,
         settings: {
           slidesToShow: 3,
-          slidesToScroll: 1,
+          slidesToScroll: 3,
           dots: false,
         },
       },
@@ -60,7 +49,7 @@ const PeopleDetails = () => {
         breakpoint: 600,
         settings: {
           slidesToShow: 2,
-          slidesToScroll: 1,
+          slidesToScroll: 2,
           initialSlide: 0,
         },
       },
@@ -68,7 +57,7 @@ const PeopleDetails = () => {
         breakpoint: 480,
         settings: {
           slidesToShow: 2,
-          slidesToScroll: 1,
+          slidesToScroll: 2,
         },
       },
     ],

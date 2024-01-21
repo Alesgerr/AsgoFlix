@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import CustomPagination from "./CustomPagination";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Select, Option } from "@material-tailwind/react";
 
 const Categories = () => {
@@ -12,7 +12,8 @@ const Categories = () => {
   const [itemsInCategory, setItemsInCategory] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-
+  const {id} = useParams()
+  console.log(id);
   const fetchGenres = async () => {
     try {
       const apiKey = "f345faa446485deffb377e9fe52e2792";

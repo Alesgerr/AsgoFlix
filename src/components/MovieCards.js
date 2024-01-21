@@ -244,7 +244,7 @@ const MovieCards = () => {
                       <div className="absolute inset-0 bg-black opacity-50 rounded-2xl"></div>
                       <div className="absolute bottom-0 p-2 w-full h-full flex flex-col items-start justify-end transition-opacity">
                         <div className="text-2x1 font-bold">{dt?.name}</div>
-                        <div className="flex items-center">
+                        <div className="flex items-center font-bold">
                           {dt.release_date ? dt.release_date.slice(0, 4) : ""}
                           <div
                             className={`flex items-center ${
@@ -287,7 +287,7 @@ const MovieCards = () => {
                       <div className="absolute inset-0 bg-black opacity-50 rounded-2xl"></div>
                       <div className="absolute bottom-0 p-2 w-full h-full flex flex-col items-start justify-end transition-opacity">
                         <div className="text-2x1 font-bold">{dt?.title}</div>
-                        <div className="flex items-center">
+                        <div className="flex items-center font-bold">
                           {dt.release_date ? dt.release_date.slice(0, 4) : ""}
                           <div
                             className={`flex items-center ${

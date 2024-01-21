@@ -23,6 +23,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import Divider from "@mui/material/Divider";
 import Tooltip from "@mui/material/Tooltip";
 import IconBtn from "@mui/material/IconButton";
+import axios from "axios";
 // import PersonAdd from '@mui/icons-material/PersonAdd';
 // import Settings from '@mui/icons-material/Settings';
 // import Logout from '@mui/icons-material/Logout';
@@ -31,9 +32,16 @@ const Header = () => {
   const [openNav, setOpenNav] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [imdbId, setImdbId] = useState("");
+  // const [apiKey] = useState('f345faa446485deffb377e9fe52e2792');
+  // const [externalSource] = useState('imdb_id');
+  // const [foundMovies, setFoundMovies] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  // const [defaultResults, setDefaultResults] = useState([]);
   const open = Boolean(anchorEl);
   const { currentUser } = useAuth();
-  console.log(currentUser);
+
   const closeLinkHandle = () => {
     setOpenNav(false);
   };
@@ -43,21 +51,58 @@ const Header = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleSearch = async () => {
+    try {
+      const apiKey = "f345faa446485deffb377e9fe52e2792";
+      const apiUrl = `https://api.themoviedb.org/3/search/multi?query=${searchQuery}&include_adult=false&language=en-US&page=1&api_key=${apiKey}`;
+      const response = await axios.get(apiUrl);
+      setSearchResults(response.data.results || []);
+    } catch (error) {
+      console.error("Error fetching data:", error.message);
+    }
+  };
+  // const fetchDefaultResults = async () => {
+  //   try {
+  //     const apiKey = "f345faa446485deffb377e9fe52e2792";
+  //     const defaultApiUrl = `https://api.themoviedb.org/3/search/multi?query=${imdbId}&include_adult=false&language=en-US&api_key=${apiKey}`;
+  //     const defaultResponse = await axios.get(defaultApiUrl);
+  //     setDefaultResults(defaultResponse.data.results || []);
+  //     console.log(defaultResponse, "DEFAULT");
+  //   } catch (error) {
+  //     console.error("Error fetching default data:", error.message);
+  //   }
+  // };
+
+  useEffect(() => {
+    // Kullanıcının yazdığı şeyi takip etmek ve anında sonuçları getirmek
+    const timeoutId = setTimeout(() => {
+      if (searchQuery.trim() !== "") {
+        handleSearch();
+      } else {
+        // Kullanıcı bir şey yazmazsa, sonuçları sıfırla
+        setSearchResults([]);
+      }
+    }, 500); // Belirli bir süre bekledikten sonra (örneğin, 500ms) arama yap
+
+    return () => clearTimeout(timeoutId); // Her yazı değiştikçe önceki zamanlamayı temizle
+  }, [searchQuery]);
+
   const navList = (
     <ul
       onClick={closeLinkHandle}
       className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6"
     >
-        <NavLink to="/tv" className="flex items-center">
-          Tv
-        </NavLink>
-    
-        <NavLink to="/movies" className="flex items-center">
-          Movies
-        </NavLink>
-        <NavLink to="/categories" className="flex items-center">
-          Categories
-        </NavLink>
+      <NavLink to="/tv" className="flex items-center">
+        Tv
+      </NavLink>
+
+      <NavLink to="/movies" className="flex items-center">
+        Movies
+      </NavLink>
+      <NavLink to="/categories" className="flex items-center">
+        Categories
+      </NavLink>
     </ul>
   );
   useEffect(() => {
@@ -124,10 +169,12 @@ const Header = () => {
         <div className="items-center gap-x-2 flex">
           <div className="hidden lg:flex">
             <div className="flex items-center w-full gap-2 md:w-full">
-              <div className="relative">
+              <div className="relative flex">
                 <Input
                   type="search"
                   placeholder="Search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   containerProps={{
                     className: "min-w-[288px]",
                   }}
@@ -136,8 +183,46 @@ const Header = () => {
                     className: "before:content-none after:content-none",
                   }}
                 />
-                <div className="!absolute left-2 top-[12px]">
+                {/* <button onClick={handleSearch}>
                   <CiSearch />
+                </button> */}
+                <div className="!absolute left-2 top-[30px] z-50  text-black">
+                  {/* <button onClick={handleSearch}>
+                    
+                  </button> */}
+                  {/* Arama yapıldığında sonuçları göster */}
+                  {/* {defaultResults.length > 0 && (
+                    <div className="mt-5">
+                      <h2>Default Results:</h2>
+                      <ul>
+                        {defaultResults.map((result) => (
+                          <li key={result.id}>{result.title || result.name}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )} */}
+
+                  {/* Arama yapıldığında sonuçları göster */}
+                  {searchResults.length > 0 && (
+                    <div className="mt-7 p-3 bg-gray-100 border rounded">
+                      <ul>
+                        <div>
+                          {searchResults?.slice(0, 10).map((result) => (
+                            <li key={result.id} className="mb-2">
+                              <Link
+                                to={`/${
+                                  result.media_type === "tv" ? "tv" : "movies"
+                                }/${result.id}`}
+                                className="text-blue-500 hover:underline"
+                              >
+                                {result.title || result.name}
+                              </Link>
+                            </li>
+                          ))}
+                        </div>
+                      </ul>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -268,6 +353,8 @@ const Header = () => {
               <Input
                 type="search"
                 placeholder="Search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 containerProps={{
                   className: "min-w-[288px]",
                 }}
@@ -279,6 +366,35 @@ const Header = () => {
               <div className="!absolute left-2 top-[12px]">
                 <CiSearch />
               </div>
+              {searchResults.length > 0 && (
+                <div className="mt-7 p-3 bg-gray-100 border rounded" onClick={closeLinkHandle}>
+                  <ul>
+                    <div>
+                      {searchResults?.slice(0, 10).map((result) => (
+                        <li key={result.id} className="mb-2">
+                          <Link
+                            to={`/${
+                              result.media_type === "tv" ? "tv" : "movies"
+                            }/${result.id}`}
+                            className="text-blue-500 hover:underline"
+                          >
+                            <div className="flex items-center">
+                              <img
+                                src={`https://image.tmdb.org/t/p/original/${
+                                  result.poster_path ? result.poster_path : result.backdrop_path
+                                }`}
+                                alt=""
+                                className="w-12 rounded-md"
+                              />
+                              <h2 className="ml-2">{result.title || result.name}</h2>
+                            </div>
+                          </Link>
+                        </li>
+                      ))}
+                    </div>
+                  </ul>
+                </div>
+              )}
             </div>
             <Button
               size="sm"
@@ -287,17 +403,19 @@ const Header = () => {
               Search
             </Button>
             <div className="mt-3 sm:mt-0 md:mt-0">
-              <button onClick={changeTheme} className="rounded-lg w-full h-full">
+              <button
+                onClick={changeTheme}
+                className="rounded-lg w-full h-full"
+              >
                 {theme === "dark" ? (
                   <div className="flex justify-center rounded-lg bg-black dark:bg-white text-white dark:text-black w-full px-2 py-2">
                     <div className="font-bold sm:hidden">Dark Mode</div>
                     <CiDark className="ml-2" size={25} />
                   </div>
-                  
                 ) : (
                   <div className="flex justify-center rounded-lg bg-black dark:bg-white text-white dark:text-black w-full px-2 py-2">
                     <div className="font-bold sm:hidden">Light Mode</div>
-                      <CiLight className="ml-2" size={25} />
+                    <CiLight className="ml-2" size={25} />
                   </div>
                 )}
               </button>

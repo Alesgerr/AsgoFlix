@@ -12,10 +12,12 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.6.5",
+    "dotenv": "^16.3.2",
     "firebase": "^10.7.2",
     "framer-motion": "^10.18.0",
     "heroicons": "^2.1.1",
     "mdb-react-ui-kit": "^7.1.0",
+    "path-browserify": "^1.0.1",
     "postcss": "^8.4.33",
     "postcss-loader": "^7.3.4",
     "react": "^18.2.0",
@@ -41,6 +43,9 @@
       "react-app",
       "react-app/jest"
     ]
+  },
+  "resolutions": {
+    "path": "path-browserify"
   },
   "browserslist": {
     "production": [

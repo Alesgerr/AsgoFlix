@@ -81,7 +81,6 @@ const Profile = () => {
    };
    const logoutHandle = async () => {
      await logout();
-     navigate("/login");
    };
    const handleResetSumbit = async (e) => {
      e.preventDefault();

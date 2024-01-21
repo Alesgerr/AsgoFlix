@@ -3,6 +3,7 @@ import { createUserWithEmailAndPassword, getAuth, sendEmailVerification, signInW
 import { doc, getFirestore, setDoc } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
 import toast from "react-hot-toast";
+import { Navigate } from "react-router-dom";
 
 const firebaseConfig = {
    apiKey: "AIzaSyAEba4kNLxijrrOr7i3udFgbo3dfStUhrw",

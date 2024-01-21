@@ -12,6 +12,8 @@ import Register from "../pages/Register";
 import ForgotPass from "../components/ForgotPass";
 import Login from "../pages/Login";
 import Profile from "../pages/Profile/Profile";
+import GenreMovies from "../pages/Genres/GenreMovies";
+import GenreTvSeries from "../pages/Genres/GenreTvSeries";
 
 export default function Router() {
    return(
@@ -25,6 +27,8 @@ export default function Router() {
           <Route path="movies/:id" element={<MoviesDetails />} />
           <Route path="actor-details/:id" element={<PeopleDetails />} />
           <Route path="categories" element={<Categories />} />
+          <Route path="genres/movies/:id" element={<GenreMovies />} />
+          <Route path="genres/tv-series/:id" element={<GenreTvSeries />} />
           <Route path="profile" element={<Profile />} />
           <Route path="sign-up" element={<Register />} />
           <Route path="sign-in" element={<Login />} />
