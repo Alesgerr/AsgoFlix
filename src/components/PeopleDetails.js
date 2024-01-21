@@ -44,14 +44,14 @@ const PeopleDetails = () => {
   const settings = {
     dots: false,
     speed: 500,
-    slidesToShow: 4, // Toplam slayt sayısını kullanabilirsiniz
-    slidesToScroll: 1, // Kaydırma işlemi gerçekleştiğinde bir slayt kaydır
+    slidesToShow: 4,
+    slidesToScroll: 1, 
     focusOnSelect: false,
     responsive: [
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: Math.min(3, totalSlides),
+          slidesToShow: 3,
           slidesToScroll: 1,
           dots: false,
         },
@@ -59,7 +59,7 @@ const PeopleDetails = () => {
       {
         breakpoint: 600,
         settings: {
-          slidesToShow: Math.min(2, totalSlides),
+          slidesToShow: 2,
           slidesToScroll: 1,
           initialSlide: 0,
         },
@@ -67,7 +67,7 @@ const PeopleDetails = () => {
       {
         breakpoint: 480,
         settings: {
-          slidesToShow: Math.min(1, totalSlides),
+          slidesToShow: 2,
           slidesToScroll: 1,
         },
       },
@@ -167,7 +167,7 @@ const PeopleDetails = () => {
                      <div className="relative">
                         <div className="relative">
                           <img
-                            src={`https://image.tmdb.org/t/p/w300/${movie?.poster_path}`}
+                            src={`https://image.tmdb.org/t/p/w300/${movie?.backdrop_path || movie?.poster_path}`}
                             alt={movie?.title}
                             className="w-full h-48 object-cover rounded-md"
                           />
@@ -178,10 +178,10 @@ const PeopleDetails = () => {
                             {movie.title.length > 50 ? movie.title.slice(20) + "..." : movie.title}
                            </h4>
                            {/* <p className="text-gray-600">{movie?.character}</p> */}
-                           <div className="flex items-center mt-2 absolute top-2 right-5 text-white">
+                           {/* <div className="flex items-center mt-2 absolute top-2 right-5 text-white">
                               <FaStar className="text-yellow-500 mr-1" />
                               {movie?.vote_average.toFixed(1)}
-                           </div>
+                           </div> */}
                         </div>
                      </div>
                    </Link>
@@ -204,7 +204,7 @@ const PeopleDetails = () => {
                      <div className="relative">
                         <div className="relative">
                           <img
-                            src={`https://image.tmdb.org/t/p/w300/${movie?.poster_path}`}
+                            src={`https://image.tmdb.org/t/p/w300/${movie?.backdrop_path || movie?.poster_path}`}
                             alt={movie?.title}
                             className="w-full h-48 object-cover rounded-md"
                           />
@@ -216,10 +216,10 @@ const PeopleDetails = () => {
                            {movie.title.length > 50 ? movie.title.slice(20) + "..." : movie.title}
                            </h4>
                            {/* <p className="text-gray-600">{movie?.character}</p> */}
-                           <div className="flex items-center mt-2 absolute top-2 right-5 text-white">
+                           {/* <div className="flex items-center mt-2 absolute top-2 right-5 text-white">
                               <FaStar className="text-yellow-500 mr-1" />
                               {movie?.vote_average.toFixed(1)}
-                           </div>
+                           </div> */}
                         </div>
                      </div>
                    </Link>

@@ -8,6 +8,10 @@ import MoviesDetails from "../pages/Movies/MoviesDetails";
 import PeopleDetails from "../components/PeopleDetails";
 import Categories from "../components/Categories";
 import Footer from "../components/Footer";
+import Register from "../pages/Register";
+import ForgotPass from "../components/ForgotPass";
+import Login from "../pages/Login";
+import Profile from "../pages/Profile/Profile";
 
 export default function Router() {
    return(
@@ -21,6 +25,11 @@ export default function Router() {
           <Route path="movies/:id" element={<MoviesDetails />} />
           <Route path="actor-details/:id" element={<PeopleDetails />} />
           <Route path="categories" element={<Categories />} />
+          <Route path="profile" element={<Profile />} />
+          <Route path="sign-up" element={<Register />} />
+          <Route path="sign-in" element={<Login />} />
+          <Route path="sign-in/forgot-password" element={<ForgotPass />} />
+          <Route path="sign-up/forgot-password" element={<ForgotPass />} />
 
           {/* <Route path="movie/:id" element={<MovieDetails />} /> */}
 

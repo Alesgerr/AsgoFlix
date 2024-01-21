@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { CiSearch, CiDark, CiLight } from "react-icons/ci";
+import { CiSearch, CiDark, CiLight, CiMenuBurger } from "react-icons/ci";
+import { HiMiniXMark } from "react-icons/hi2";
 import {
   Navbar,
   MobileNav,
@@ -10,49 +11,53 @@ import {
   Input,
   Collapse,
 } from "@material-tailwind/react";
+import profile from "../assets/profile.png";
+import { motion } from "framer-motion";
+import useAuth from "../custom-hooks/useAuth";
+import { logout } from "../firebase";
+import Box from "@mui/material/Box";
+import Avatar from "@mui/material/Avatar";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import Divider from "@mui/material/Divider";
+import Tooltip from "@mui/material/Tooltip";
+import IconBtn from "@mui/material/IconButton";
+// import PersonAdd from '@mui/icons-material/PersonAdd';
+// import Settings from '@mui/icons-material/Settings';
+// import Logout from '@mui/icons-material/Logout';
 
 const Header = () => {
   const [openNav, setOpenNav] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-
-  const closeLinkHande = () => {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const { currentUser } = useAuth();
+  console.log(currentUser);
+  const closeLinkHandle = () => {
     setOpenNav(false);
+  };
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
   };
   const navList = (
     <ul
-      onClick={closeLinkHande}
+      onClick={closeLinkHandle}
       className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6"
     >
-      <Typography
-        as="li"
-        variant="small"
-        color="blue-gray"
-        className="flex items-center gap-x-2 p-1 font-medium"
-      >
         <NavLink to="/tv" className="flex items-center">
           Tv
         </NavLink>
-      </Typography>
-      <Typography
-        as="li"
-        variant="small"
-        color="blue-gray"
-        className="flex items-center gap-x-2 p-1 font-medium"
-      >
+    
         <NavLink to="/movies" className="flex items-center">
           Movies
         </NavLink>
-      </Typography>
-      <Typography
-        as="li"
-        variant="small"
-        color="blue-gray"
-        className="flex items-center gap-x-2 p-1 font-medium"
-      >
         <NavLink to="/categories" className="flex items-center">
           Categories
         </NavLink>
-      </Typography>
     </ul>
   );
   useEffect(() => {
@@ -96,11 +101,15 @@ const Header = () => {
   };
 
   return (
-    <Navbar className={`${openNav ? 'dark:bg-black' : 'bg-white'} dark:text-white rounded-none bg-transparent ml-2 mr-2 mx-auto dark:shadow-gray-900 dark:shadow-sm shadow-md dark:border-hidden border-hidden text-black px-4 py-2 lg:px-8 lg:py-4 relative z-50`}>
+    <Navbar
+      className={`${
+        openNav ? "dark:bg-black" : "bg-white"
+      } dark:text-white rounded-none bg-transparent ml-2 mr-2 mx-auto dark:shadow-gray-900 dark:shadow-sm shadow-md dark:border-hidden border-hidden text-black px-4 py-2 lg:px-8 lg:py-4 relative z-50`}
+    >
       <div className="container mx-auto flex flex-wrap lg:items-center justify-between text-blue-gray-900">
         <Typography
           as="a"
-          href="#"
+          href="/"
           className="mr-4 cursor-pointer py-1.5 flex items-center font-medium"
         >
           <div className="logo font-bold" style={{ fontSize: "23px" }}>
@@ -112,70 +121,144 @@ const Header = () => {
             <div className="hidden lg:block text-1xl ">{navList}</div>
           </div>
         </Typography>
-        <div className="hidden items-center gap-x-2 lg:flex ">
-          <div className="relative flex w-full gap-2 md:w-full">
-            <Input
-              type="search"
-              placeholder="Search"
-              containerProps={{
-                className: "min-w-[288px]",
-              }}
-              className="pl-9 rounded-lg  "
-              labelProps={{
-                className: "before:content-none after:content-none",
-              }}
-            />
-            <div className="!absolute left-2 top-[12px]">
-              <CiSearch />
+        <div className="items-center gap-x-2 flex">
+          <div className="hidden lg:flex">
+            <div className="flex items-center w-full gap-2 md:w-full">
+              <div className="relative">
+                <Input
+                  type="search"
+                  placeholder="Search"
+                  containerProps={{
+                    className: "min-w-[288px]",
+                  }}
+                  className="pl-9 p-2 rounded-lg  "
+                  labelProps={{
+                    className: "before:content-none after:content-none",
+                  }}
+                />
+                <div className="!absolute left-2 top-[12px]">
+                  <CiSearch />
+                </div>
+              </div>
             </div>
           </div>
-          <Button
+          <div className="user-i">
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
+              {/* <Typography sx={{ minWidth: 100 }}>Contact</Typography> */}
+              {/* <Typography sx={{ minWidth: 100 }}>Profile</Typography> */}
+              <Tooltip title="Account settings">
+                <IconBtn
+                  onClick={handleClick}
+                  size="small"
+                  sx={{ ml: 2 }}
+                  aria-controls={open ? "account-menu" : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? "true" : undefined}
+                >
+                  <motion.img
+                    className="rounded-circle object-fit-cover"
+                    width={35}
+                    height={35}
+                    whileTap={{ scale: 1.2 }}
+                    src={currentUser ? currentUser.photoURL : profile}
+                    alt={currentUser ? "" : ""}
+                  />
+                </IconBtn>
+              </Tooltip>
+            </Box>
+            <Menu
+              anchorEl={anchorEl}
+              id="account-menu"
+              open={open}
+              onClose={handleClose}
+              onClick={handleClose}
+              PaperProps={{
+                elevation: 0,
+                sx: {
+                  overflow: "visible",
+                  filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                  mt: 1.5,
+                  "& .MuiAvatar-root": {
+                    width: 42,
+                    height: 42,
+                    ml: -0.5,
+                    mr: 1,
+                  },
+                  "&::before": {
+                    content: '""',
+                    display: "block",
+                    position: "absolute",
+                    top: 0,
+                    right: 14,
+                    width: 10,
+                    height: 10,
+                    bgcolor: "background.paper",
+                    transform: "translateY(-50%) rotate(45deg)",
+                    zIndex: 0,
+                  },
+                },
+              }}
+              transformOrigin={{ horizontal: "right", vertical: "top" }}
+              anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+            >
+              <MenuItem onClick={handleClose}>
+                <Avatar /> {currentUser ? currentUser.displayName : "Profile"}
+              </MenuItem>
+              <Divider />
+              <MenuItem onClick={handleClose}>
+                <ListItemIcon>
+                  {/* <PersonAdd fontSize="small" /> */}
+                </ListItemIcon>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <ListItemIcon>
+                  {/* <Settings fontSize="small" /> */}
+                  {currentUser ? (
+                    <Link to="/profile">
+                      <button>Settings</button>
+                    </Link>
+                  ) : (
+                    ""
+                  )}
+                </ListItemIcon>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <ListItemIcon>
+                  {/* <Logout fontSize="small" /> */}
+                  {currentUser ? (
+                    <button onClick={logout}>Logout</button>
+                  ) : (
+                    <Link to="sign-in">Sign in</Link>
+                  )}
+                </ListItemIcon>
+              </MenuItem>
+            </Menu>
+          </div>
+          {/* <Button
             size="sm"
             className="rounded-lg dark:text-black dark:bg-white text-white bg-black"
           >
             Search
-          </Button>
-          <button onClick={changeTheme} className="rounded-lg  ml-2">
-            {theme === "dark" ? <CiDark size={25} /> : <CiLight size={25} />}
+          </Button> */}
+          <div className="hidden lg:flex">
+            <button onClick={changeTheme} className="rounded-lg  ml-2">
+              {theme === "dark" ? <CiDark size={30} /> : <CiLight size={30} />}
+            </button>
+          </div>
+          <button
+            variant="text"
+            className="ml-auto h-6 w-6  hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
+            onClick={() => setOpenNav(!openNav)}
+          >
+            {openNav ? <HiMiniXMark size={25} /> : <CiMenuBurger size={25} />}
           </button>
         </div>
-        <IconButton
-          variant="text"
-          className="ml-auto h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
-          ripple={false}
-          onClick={() => setOpenNav(!openNav)}
-        >
-          {openNav ? (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              className="h-6 w-6"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          ) : (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          )}
-        </IconButton>
       </div>
       <Collapse open={openNav}>
         <div className="container mx-auto">
@@ -203,12 +286,19 @@ const Header = () => {
             >
               Search
             </Button>
-            <div className="mt-3 flex text-center">
-              <button onClick={changeTheme} className="rounded-lg ml-2">
+            <div className="mt-3 sm:mt-0 md:mt-0">
+              <button onClick={changeTheme} className="rounded-lg w-full h-full">
                 {theme === "dark" ? (
-                  <CiDark size={25} />
+                  <div className="flex justify-center rounded-lg bg-black dark:bg-white text-white dark:text-black w-full px-2 py-2">
+                    <div className="font-bold sm:hidden">Dark Mode</div>
+                    <CiDark className="ml-2" size={25} />
+                  </div>
+                  
                 ) : (
-                  <CiLight size={25} />
+                  <div className="flex justify-center rounded-lg bg-black dark:bg-white text-white dark:text-black w-full px-2 py-2">
+                    <div className="font-bold sm:hidden">Light Mode</div>
+                      <CiLight className="ml-2" size={25} />
+                  </div>
                 )}
               </button>
             </div>

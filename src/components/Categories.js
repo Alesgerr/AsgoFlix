@@ -1,8 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { FaStar } from "react-icons/fa";
 import CustomPagination from "./CustomPagination";
 import { Link } from "react-router-dom";
+import { Select, Option } from "@material-tailwind/react";
 
 const Categories = () => {
   const [movieGenres, setMovieGenres] = useState([]);
@@ -34,11 +34,8 @@ const Categories = () => {
   };
 
   useEffect(() => {
-    
-
     fetchGenres();
   }, []);
-
 
   const fetchItems = async (category, genreId, page = 1) => {
     const apiKey = "f345faa446485deffb377e9fe52e2792";
@@ -85,7 +82,6 @@ const Categories = () => {
   const handleGenreChange = (genreId) => {
     setSelectedGenre(genreId);
     fetchItems(selectedCategory, genreId, 1);
-
   };
 
   const handlePageChange = (page) => {
@@ -100,7 +96,13 @@ const Categories = () => {
   return (
     <div className="container mx-auto mt-10 overflow-hidden">
       <div className="flex flex-wrap gap-1 px-4">
-        <div className="mb-5 text-white">
+        <div className="mb-5 text-white flex w-50 flex-col gap-6">
+          {/* <Select value={selectedCategory} onChange={(e) => handleCategoryChange(e.target.value)} size="md"
+        className="p-2 border rounded bg-gray-600 border-none cursor-pointer"
+        >
+            <Option value="movies">Movies</Option>
+            <Option value="tv">TV Shows</Option>
+        </Select> */}
           <select
             value={selectedCategory}
             onChange={(e) => handleCategoryChange(e.target.value)}
@@ -112,7 +114,7 @@ const Categories = () => {
         </div>
 
         {selectedCategory && (
-          <div className="mb-5 text-white">
+          <div className="mb-5 text-white flex w-50 flex-col gap-6">
             <select
               value={selectedGenre}
               onChange={(e) => handleGenreChange(e.target.value)}
@@ -184,6 +186,7 @@ const Categories = () => {
           <CustomPagination
             currentPage={currentPage}
             totalPages={totalPages}
+            className="bg-black py-2 px-2 text-white"
             onPageChange={handlePageChange}
           />
         </div>

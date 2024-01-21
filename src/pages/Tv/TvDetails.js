@@ -79,7 +79,7 @@ const TvDetails = () => {
         {/* <p className="text-gray-400">Vote Average: {season.vote_average}</p> */}
         <div className="flex items-center">
          <FaStar className="text-yellow-400"/>
-         <span className="ml-1">{season.vote_average}</span>
+         <span className="ml-1 text-white">{season.vote_average}</span>
         </div>
       </div>
     ));

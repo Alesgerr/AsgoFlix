@@ -1,0 +1,87 @@
+.user-profile img {
+  width: 200px;
+  height: 200px;
+  border-radius: 10px;
+  object-fit: cover;
+  cursor: pointer;
+}
+.user-profile .profile-info1 {
+  border-radius: 10px;
+  padding: 1rem;
+  text-align: center;
+}
+.profile-info2 {
+  border-radius: 10px;
+  padding: 1rem;
+}
+.prof-btn-box {
+  text-align: center;
+  margin: 1rem 0;
+}
+
+.user-prof-btn {
+  padding: 5px 15px;
+  background-color: #ccc;
+  color: #000;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  /* font-weight: 600; */
+  transition: background-color 0.2s;
+  margin: auto;
+}
+
+#fileInput {
+  display: none;
+}
+
+/* ! Profile right*/
+h3 {
+  margin: 0;
+}
+.prof-box {
+  border-top: 1px solid #ccc;
+}
+.prof-box-d {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 1rem 0;
+}
+.prof-btn {
+  width: 5em;
+  border: none;
+  border-radius: 5px !important;
+  font-weight: 600 !important;
+  background-color: #ccc !important;
+  color: #000 !important;
+}
+/* ! Modal Reset Pass */
+.modal-hide-btn {
+  display: inline-block;
+  padding: 5px 15px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  font-weight: 600;
+  background-color: #ccc !important;
+  color: #000 !important;
+  transition: background-color 0.2s;
+}
+.reset-pass-btn {
+  padding: 5px 15px;
+  border: none;
+  border-radius: 5px;
+  background-color: #000 !important;
+}
+.user-verification {
+  display: flex;
+  align-items: center;
+}
+.user-verification .prof-badge {
+  padding: 0 5px;
+  font-size: 25px;
+}
+h5 {
+  margin: 0;
+}
