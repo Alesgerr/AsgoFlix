@@ -240,12 +240,12 @@ const MoviesDetails = () => {
                       height={50}
                     />
                   ) : (
-                    <div className="flex flex-wrap">
+                    <div className="flex flex-wrap gap-2">
                       {genres &&
                         genres.slice(0, 5).map((genre, i) => (
                           <Link to={`/genres/tv-series/${genre.id}`} key={i}>
-                            <div className="gap-1 flex">
-                              <span key={i} className="genres__item ">
+                            <div>
+                              <span key={i} className="genres__item">
                                 {genre.name}
                               </span>
                             </div>
@@ -263,7 +263,7 @@ const MoviesDetails = () => {
                       height={40}
                     />
                   ) : (
-                    <div>
+                    <div className="flex items-center">
                       <FaStar className="me-2 text-yellow-400" />{" "}
                       {vote_average.toFixed(2)}
                     </div>

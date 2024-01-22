@@ -75,17 +75,15 @@ const Header = () => {
   // };
 
   useEffect(() => {
-    // Kullanıcının yazdığı şeyi takip etmek ve anında sonuçları getirmek
     const timeoutId = setTimeout(() => {
       if (searchQuery.trim() !== "") {
         handleSearch();
       } else {
-        // Kullanıcı bir şey yazmazsa, sonuçları sıfırla
         setSearchResults([]);
       }
-    }, 500); // Belirli bir süre bekledikten sonra (örneğin, 500ms) arama yap
+    }, 500);
 
-    return () => clearTimeout(timeoutId); // Her yazı değiştikçe önceki zamanlamayı temizle
+    return () => clearTimeout(timeoutId);
   }, [searchQuery]);
 
   const navList = (
@@ -114,13 +112,6 @@ const Header = () => {
   const [theme, setTheme] = useState(
     localStorage.getItem("theme") === "light" ? "dark" : "light"
   );
-
-  const menu = [
-    {
-      name: "Sign In",
-      url: "/login",
-    },
-  ];
 
   useEffect(() => {
     if (
@@ -183,31 +174,19 @@ const Header = () => {
                     className: "before:content-none after:content-none",
                   }}
                 />
-                {/* <button onClick={handleSearch}>
+                <button
+                  style={{ top: "30%", left: ".5rem" }}
+                  className="absolute top- left-2"
+                  onClick={handleSearch}
+                >
                   <CiSearch />
-                </button> */}
+                </button>
                 <div className="!absolute left-2 top-[30px] z-50  text-black">
-                  {/* <button onClick={handleSearch}>
-                    
-                  </button> */}
-                  {/* Arama yapıldığında sonuçları göster */}
-                  {/* {defaultResults.length > 0 && (
-                    <div className="mt-5">
-                      <h2>Default Results:</h2>
-                      <ul>
-                        {defaultResults.map((result) => (
-                          <li key={result.id}>{result.title || result.name}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )} */}
-
-                  {/* Arama yapıldığında sonuçları göster */}
                   {searchResults.length > 0 && (
                     <div className="mt-7 p-3 bg-gray-100 border rounded">
                       <ul>
                         <div>
-                          {searchResults?.slice(0, 10).map((result) => (
+                          {searchResults?.slice(0, 6).map((result) => (
                             <li key={result.id} className="mb-2">
                               <Link
                                 to={`/${
@@ -215,7 +194,20 @@ const Header = () => {
                                 }/${result.id}`}
                                 className="text-blue-500 hover:underline"
                               >
-                                {result.title || result.name}
+                                <div className="flex items-center">
+                                  <img
+                                    src={`https://image.tmdb.org/t/p/original/${
+                                      result.poster_path
+                                        ? result.poster_path
+                                        : result.backdrop_path
+                                    }`}
+                                    alt=""
+                                    className="w-12 rounded-md"
+                                  />
+                                  <h2 className="ml-2">
+                                    {result.title || result.name}
+                                  </h2>
+                                </div>
                               </Link>
                             </li>
                           ))}
@@ -247,11 +239,9 @@ const Header = () => {
                   aria-expanded={open ? "true" : undefined}
                 >
                   <motion.img
-                    className="rounded-circle object-fit-cover"
-                    width={35}
-                    height={35}
+                    className="rounded-full w-9 h-9 object-cover"
                     whileTap={{ scale: 1.2 }}
-                    src={currentUser ? currentUser.photoURL : profile}
+                    src={currentUser?.photoURL ? currentUser.photoURL : profile}
                     alt={currentUser ? "" : ""}
                   />
                 </IconBtn>
@@ -272,7 +262,7 @@ const Header = () => {
                   "& .MuiAvatar-root": {
                     width: 42,
                     height: 42,
-                    ml: -0.5,
+                    ml: 1,
                     mr: 1,
                   },
                   "&::before": {
@@ -293,33 +283,47 @@ const Header = () => {
               anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
             >
               <MenuItem onClick={handleClose}>
-                <Avatar /> {currentUser ? currentUser.displayName : "Profile"}
+                <Link to="/profile">
+                  <div className="flex flex-col justify-center">
+                    <motion.img
+                      className="rounded-full w-24 h-24 object-cover mr-1"
+                      src={
+                        currentUser?.photoURL ? currentUser.photoURL : profile
+                      }
+                      alt={currentUser ? "" : ""}
+                    />
+                    <div className="mt-2">
+                      {currentUser ? (
+                        <h1 className="font-bold">{currentUser.displayName}</h1>
+                      ) : (
+                        <div className="hidden"></div>
+                      )}
+                    </div>
+                  </div>
+                </Link>
               </MenuItem>
               <Divider />
               <MenuItem onClick={handleClose}>
                 <ListItemIcon>
-                  {/* <PersonAdd fontSize="small" /> */}
-                </ListItemIcon>
-              </MenuItem>
-              <MenuItem onClick={handleClose}>
-                <ListItemIcon>
                   {/* <Settings fontSize="small" /> */}
                   {currentUser ? (
-                    <Link to="/profile">
-                      <button>Settings</button>
+                    <Link className="/profile">
+                      <div className="text-gray-600 font-bold">
+                        <div>
+                          <button>Settings</button>
+                        </div>
+                        <div className="mt-2">
+                          <button onClick={logout}>Logout</button>
+                        </div>
+                      </div>
                     </Link>
                   ) : (
-                    ""
-                  )}
-                </ListItemIcon>
-              </MenuItem>
-              <MenuItem onClick={handleClose}>
-                <ListItemIcon>
-                  {/* <Logout fontSize="small" /> */}
-                  {currentUser ? (
-                    <button onClick={logout}>Logout</button>
-                  ) : (
-                    <Link to="sign-in">Sign in</Link>
+                    <Link
+                      to="/sign-in"
+                      className="text-gray-600 font-bold w-full"
+                    >
+                      <button>Sign in</button>
+                    </Link>
                   )}
                 </ListItemIcon>
               </MenuItem>
@@ -367,7 +371,10 @@ const Header = () => {
                 <CiSearch />
               </div>
               {searchResults.length > 0 && (
-                <div className="mt-7 p-3 bg-gray-100 border rounded" onClick={closeLinkHandle}>
+                <div
+                  className="mt-7 p-3 bg-gray-100 border rounded"
+                  onClick={closeLinkHandle}
+                >
                   <ul>
                     <div>
                       {searchResults?.slice(0, 10).map((result) => (
@@ -381,12 +388,16 @@ const Header = () => {
                             <div className="flex items-center">
                               <img
                                 src={`https://image.tmdb.org/t/p/original/${
-                                  result.poster_path ? result.poster_path : result.backdrop_path
+                                  result.poster_path
+                                    ? result.poster_path
+                                    : result.backdrop_path
                                 }`}
                                 alt=""
                                 className="w-12 rounded-md"
                               />
-                              <h2 className="ml-2">{result.title || result.name}</h2>
+                              <h2 className="ml-2">
+                                {result.title || result.name}
+                              </h2>
                             </div>
                           </Link>
                         </li>

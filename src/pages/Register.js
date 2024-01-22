@@ -5,28 +5,30 @@ const Register = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [displayName, setDisplayName] = useState(""); 
+  const [displayName, setDisplayName] = useState("");
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
-   e.preventDefault();
-   try {
-    const user = await register(email, password, displayName);
+    e.preventDefault();
+    try {
+      const user = await register(email, password, displayName);
       console.log("User registered:", user);
-      navigate('/sign-in')
-   } catch (error) {
-     console.error("Registration failed:", error.message);
-   }
- };
+      if (user) {
+        navigate("/sign-in");
+      }
+    } catch (error) {
+      console.error("Registration failed:", error.message);
+    }
+  };
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <img
+        {/* <img
           className="mx-auto h-10 w-auto"
           src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
           alt="Your Company"
-        />
-        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+        /> */}
+        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900 dark:text-white">
           Sign in to your account
         </h2>
       </div>
@@ -36,7 +38,7 @@ const Register = () => {
           <div>
             <label
               htmlFor="username"
-              className="block text-sm font-medium leading-6 text-gray-900"
+              className="block text-sm font-medium leading-6 text-gray-900 dark:text-white"
             >
               Username
             </label>
@@ -56,7 +58,7 @@ const Register = () => {
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium leading-6 text-gray-900"
+              className="block text-sm font-medium leading-6 text-gray-900 dark:text-white"
             >
               Email address
             </label>
@@ -77,7 +79,7 @@ const Register = () => {
             <div className="flex items-center justify-between">
               <label
                 htmlFor="password"
-                className="block text-sm font-medium leading-6 text-gray-900"
+                className="block text-sm font-medium leading-6 text-gray-900 dark:text-white"
               >
                 Password
               </label>
@@ -112,12 +114,12 @@ const Register = () => {
         </form>
 
         <p className="mt-10 text-center text-sm text-gray-500">
-          Not a member?
+          Do you have an account?
           <Link
-            to="#"
+            to="/sign-in"
             className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
           >
-            Start a 14 day free trial
+            Sign in
           </Link>
         </p>
       </div>

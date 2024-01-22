@@ -25,6 +25,7 @@ import ModalClose from "@mui/joy/ModalClose";
 import Typography from "@mui/joy/Typography";
 import Sheet from "@mui/joy/Sheet";
 import Input from "@mui/joy/Input";
+import { motion } from "framer-motion";
 
 const Profile = () => {
    const {currentUser} = useAuth()
@@ -121,11 +122,14 @@ const Profile = () => {
               <button onClick={handleProfileUpdate}>Fotoğrafı Güncelle</button> */}
               <div className="flex justify-center">
                 <label htmlFor="fileInput" className="custom-file-upload">
-                  <img
-                    src={currentUser ? currentUser.photoURL : profile}
-                    alt=""
-                    className="profile-image"
-                  />
+                  <motion.img
+                      className="rounded-circle object-fit-cover mr-1"
+                      width={35}
+                      height={35}
+                      whileTap={{ scale: 1.2 }}
+                      src={currentUser?.photoURL ? currentUser.photoURL : profile}
+                      alt={currentUser ? "" : ""}
+                    />
                   <input
                     type="file"
                     accept="image/*"
@@ -512,7 +516,7 @@ const Profile = () => {
           </div>
         </div>
       ) : (
-        <Navigate to="/login" />
+        <Navigate to="/" />
       )}
     </div>
   )
