@@ -50,16 +50,20 @@ const Movies = () => {
     setSortBy(value);
     setPage(1); // Yeni bir sıralama seçildiğinde sayfayı sıfırla
   };
-
+ useEffect(() => {
+   window.scrollTo(0, 0);
+ }, [page]);
   return (
     <div className="container mx-auto flex flex-wrap justify-between">
-      <div className="flex flex-wrap justify-center mt-3 mb-3 gap-3 container mx-auto">
+      <div className="flex flex-wrap justify-center mt-3 mb-3 gap-2 px-2 container mx-auto">
         <select
           value={sortBy}
           onChange={(e) => handleSortChange(e.target.value)}
           className="mr-4 p-2 border rounded dark:bg-black"
         >
-          <option disabled value='sort'>Sort</option>
+          <option disabled value="sort">
+            Sort
+          </option>
           <option value="vote_average.desc">High to Low Rating</option>
           <option value="vote_average.asc">Low to High Rating</option>
           <option value="first_air_date.asc">Oldest to Newest</option>
@@ -69,7 +73,9 @@ const Movies = () => {
           <button
             onClick={() => handlePageChange(page - 1)}
             disabled={page === 1}
-            className={`p-2 border rounded ${page === 1 ? "bg-gray-400 opacity-40" : ""}`}
+            className={`p-2 border rounded ${
+              page === 1 ? "bg-gray-400 opacity-40" : ""
+            }`}
           >
             Previous
           </button>
@@ -89,22 +95,31 @@ const Movies = () => {
           >
             <Link to={`/movies/${dt.id}`}>
               <div className="relative">
-                <img
-                  className="object-cover rounded-xl h-56"
-                  width={500}
-                  height={300}
-                  src={`https://image.tmdb.org/t/p/original/${
-                    dt?.backdrop_path || dt?.poster_path
-                  }`}
-                  alt={dt?.name}
-                />
+                {dt?.backdrop_path || dt?.poster_path ? (
+                  <div>
+                    <img
+                      className="h-64 object-cover rounded-2xl"
+                      width={500}
+                      height={450}
+                      src={`https://image.tmdb.org/t/p/original/${
+                        dt?.backdrop_path || dt?.poster_path
+                      }`}
+                    />
+                  </div>
+                ) : (
+                  <img
+                    className="h-64 object-cover rounded-2xl"
+                    width={500}
+                    height={450}
+                    src={`https://m.media-amazon.com/images/I/61s8vyZLSzL.jpg`}
+                  />
+                )}
+
                 <div className="absolute inset-0 bg-black opacity-30 rounded-xl"></div>
                 <div className="absolute text-white bottom-0 p-2 w-full h-full flex flex-col items-start justify-end transition-opacity">
                   <div className="text-1xl font-bold">{dt?.title}</div>
                   <div className="text-1xl font-bold">
-                    <div className="flex">
-                      {dt?.first_air_date}
-                    </div>
+                    <div className="flex">{dt?.first_air_date}</div>
                     <div className="flex items-center">
                       <FaStar className="me-1 text-yellow-500" />{" "}
                       {dt?.vote_average.toFixed(2)}
@@ -117,20 +132,22 @@ const Movies = () => {
         ))}
       </div>
       <div className="flex flex-1 justify-end mt-3 px-3 py-5">
-          <button
-            onClick={() => handlePageChange(page - 1)}
-            disabled={page === 1}
-            className={`p-2 border rounded ${page === 1 ? "bg-gray-400 opacity-40" : ""}`}
-          >
-            Previous
-          </button>
-          <button
-            onClick={() => handlePageChange(page + 1)}
-            className="ml-2 p-2 border rounded"
-          >
-            Next
-          </button>
-        </div>
+        <button
+          onClick={() => handlePageChange(page - 1)}
+          disabled={page === 1}
+          className={`p-2 border rounded ${
+            page === 1 ? "bg-gray-400 opacity-40" : ""
+          }`}
+        >
+          Previous
+        </button>
+        <button
+          onClick={() => handlePageChange(page + 1)}
+          className="ml-2 p-2 border rounded"
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };

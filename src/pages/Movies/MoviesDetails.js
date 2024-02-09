@@ -85,7 +85,9 @@ const MoviesDetails = () => {
     fetchCredits();
     fetchSimilar();
   }, [id]);
-
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [movieData]);
   const {
     budget,
     backdrop_path,
@@ -190,13 +192,25 @@ const MoviesDetails = () => {
                   />
                 ) : (
                   <div className="pt-5 max-w-80">
-                    <img
-                      className="rounded-xl details_img"
-                      src={`https://image.tmdb.org/t/p/original/${
-                        poster_path ? poster_path : backdrop_path
-                      }`}
-                      alt=""
-                    />
+                    {backdrop_path || poster_path ? (
+                      <div>
+                        <img
+                          className="h-96 object-cover rounded-2xl"
+                          width={500}
+                          height={450}
+                          src={`https://image.tmdb.org/t/p/original/${
+                            backdrop_path || poster_path
+                          }`}
+                        />
+                      </div>
+                    ) : (
+                      <img
+                        className="h-96 object-cover rounded-2xl"
+                        width={500}
+                        height={450}
+                        src={`https://m.media-amazon.com/images/I/61s8vyZLSzL.jpg`}
+                      />
+                    )}
                   </div>
                 )}
               </div>
@@ -289,7 +303,7 @@ const MoviesDetails = () => {
                 <div className="mt-2 mb-2 cast">
                   <Slider {...settings}>
                     {loading
-                      ? Array.from({ length: 4 }).map((_, index) => (
+                      ? Array.from({ length: 8 }).map((_, index) => (
                           <LoadingCardActor key={index} />
                         ))
                       : castData.cast?.map((dt) => (
@@ -332,12 +346,12 @@ const MoviesDetails = () => {
               </div>
             </div>
             <div className="similar-movies container mx-auto px-5 relative">
-              {loading ? (
-                ""
-              ) : (
+              {simMovData && simMovData.length > 0 ? (
                 <h1 className="dark:text-white px-1 py-5 font-bold text-2xl">
                   Similar Movies
                 </h1>
+              ) : (
+                ""
               )}
               <Slider {...settings2}>
                 {loading
@@ -351,14 +365,25 @@ const MoviesDetails = () => {
                       >
                         <Link to={`/movies/${dt.id}`}>
                           <div className="relative">
-                            <img
-                              className="h-64 object-cover rounded-2xl"
-                              width={500}
-                              height={450}
-                              src={`https://image.tmdb.org/t/p/original/${
-                                dt?.backdrop_path || dt?.poster_path
-                              }`}
-                            />
+                            {dt?.backdrop_path || dt?.poster_path ? (
+                              <div>
+                                <img
+                                  className="h-64 object-cover rounded-2xl"
+                                  width={500}
+                                  height={450}
+                                  src={`https://image.tmdb.org/t/p/original/${
+                                    dt?.backdrop_path || dt?.poster_path
+                                  }`}
+                                />
+                              </div>
+                            ) : (
+                              <img
+                                className="h-64 object-cover rounded-2xl"
+                                width={500}
+                                height={450}
+                                src={`https://m.media-amazon.com/images/I/61s8vyZLSzL.jpg`}
+                              />
+                            )}
                             <div className="absolute inset-0 bg-black opacity-50 rounded-2xl"></div>
                             <div className="absolute bottom-0 p-2 w-full h-full flex flex-col items-start justify-end transition-opacity">
                               <div className="text-2x1 font-bold">

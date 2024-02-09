@@ -13,7 +13,6 @@ const Categories = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const {id} = useParams()
-  console.log(id);
   const fetchGenres = async () => {
     try {
       const apiKey = "f345faa446485deffb377e9fe52e2792";

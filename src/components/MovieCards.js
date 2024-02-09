@@ -5,6 +5,8 @@ import { FaStar } from "react-icons/fa";
 import { Link } from "react-router-dom";
 // import Skeleton from 'react-loading-skeleton';
 import Skeleton from "@mui/material/Skeleton";
+import VideoModal from "./VideoModal";
+
 const LoadingCardActor = () => (
   <div className="flex justify-center  gap-2">
     <Skeleton
@@ -32,7 +34,7 @@ const MovieCards = () => {
   const [popularMovies, setPopularMovies] = useState([]);
   const [trendingActors, setTrendingActors] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const [isModalOpen, setModalOpen] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -69,6 +71,9 @@ const MovieCards = () => {
 
     fetchData();
   }, []);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [popularMovies]);
   const settings = {
     dots: loading ? false : true,
     infinite: true,
@@ -136,9 +141,84 @@ const MovieCards = () => {
       },
     ],
   };
+   const settingsBanner = {
+     dots: true,
+     infinite: true,
+     speed: 500,
+     slidesToShow: 1,
+     slidesToScroll: 1,
+     responsive: [
+       {
+         breakpoint: 1024,
+         settings: {
+           slidesToShow: 1,
+           slidesToScroll: 1,
+           infinite: true,
+           dots: true,
+         },
+       },
+       {
+         breakpoint: 768,
+         settings: {
+           slidesToShow: 1,
+           slidesToScroll: 1,
+           initialSlide: 1,
+         },
+       },
+       {
+         breakpoint: 480,
+         settings: {
+           slidesToShow: 1,
+           slidesToScroll: 1,
+         },
+       },
+     ],
+   };
+  const openModal = () => {
+    setModalOpen(true);
+  };
 
+  // Modal'ı kapatan fonksiyon
+  const closeModal = () => {
+    setModalOpen(false);
+  };
   return (
-    <div className="movies_cards overflow-hidden px-5 lg:px-0 ">
+    <div className="movies_cards overflow-hidden px-3 lg:px-0 ">
+      <div className="banner mt-2">
+        {popularMovies?.slice(0, 1).map((item, i) => (
+          <div key={i}>
+            <div className="relative bg-gradient-to-r p-10 h-96 text-white">
+              <div className="container mx-auto flex flex-wrap items-center justify-center h-96 ">
+                <div className="text-center z-50">
+                  <h1 className="text-4xl font-bold mb-4">
+                    Welcome to Asgoflix!
+                  </h1>
+                  <p className="text-lg mb-6">
+                    Discover your favorite movies and TV series here.
+                  </p>
+                  <Link
+                    to="/categories" // İlgili linke yönlendirme yapın
+                    className="bg-red-600 text-white font-semibold px-6 py-3 rounded-full hover:bg-red-700 transition duration-300"
+                  >
+                    Discover Now
+                  </Link>
+                </div>
+                <div className="banner_img">
+                  <img
+                    className="h-full w-full object-cover rounded-2xl absolute top-0 left-0"
+                    // width={1000}
+                    // height={400}
+                    src={`https://image.tmdb.org/t/p/original/${
+                      item?.backdrop_path || item?.poster_path
+                    }`}
+                  />
+                  <div className="absolute h-96 inset-0 bg-black opacity-50 rounded-2xl"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
       <div className="actor-card">
         <h2 className="text-2xl p-1 font-bold mb-4 flex">Popular Actors</h2>
         <Slider {...settings2}>

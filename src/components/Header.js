@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { CiSearch, CiDark, CiLight, CiMenuBurger } from "react-icons/ci";
 import { HiMiniXMark } from "react-icons/hi2";
 import {
   Navbar,
-  MobileNav,
-  Typography,
-  Button,
-  IconButton,
-  Input,
   Collapse,
+  Input,
+  Button,
+  Typography,
 } from "@material-tailwind/react";
 import profile from "../assets/profile.png";
 import { motion } from "framer-motion";
@@ -24,30 +22,31 @@ import Divider from "@mui/material/Divider";
 import Tooltip from "@mui/material/Tooltip";
 import IconBtn from "@mui/material/IconButton";
 import axios from "axios";
-// import PersonAdd from '@mui/icons-material/PersonAdd';
-// import Settings from '@mui/icons-material/Settings';
-// import Logout from '@mui/icons-material/Logout';
 
 const Header = () => {
   const [openNav, setOpenNav] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [imdbId, setImdbId] = useState("");
-  // const [apiKey] = useState('f345faa446485deffb377e9fe52e2792');
-  // const [externalSource] = useState('imdb_id');
-  // const [foundMovies, setFoundMovies] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  // const [defaultResults, setDefaultResults] = useState([]);
   const open = Boolean(anchorEl);
   const { currentUser } = useAuth();
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  const [resultsVisible, setResultsVisible] = useState(true);
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!isDropdownOpen);
+  };
 
   const closeLinkHandle = () => {
     setOpenNav(false);
   };
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -62,17 +61,6 @@ const Header = () => {
       console.error("Error fetching data:", error.message);
     }
   };
-  // const fetchDefaultResults = async () => {
-  //   try {
-  //     const apiKey = "f345faa446485deffb377e9fe52e2792";
-  //     const defaultApiUrl = `https://api.themoviedb.org/3/search/multi?query=${imdbId}&include_adult=false&language=en-US&api_key=${apiKey}`;
-  //     const defaultResponse = await axios.get(defaultApiUrl);
-  //     setDefaultResults(defaultResponse.data.results || []);
-  //     console.log(defaultResponse, "DEFAULT");
-  //   } catch (error) {
-  //     console.error("Error fetching default data:", error.message);
-  //   }
-  // };
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -103,6 +91,7 @@ const Header = () => {
       </NavLink>
     </ul>
   );
+
   useEffect(() => {
     window.addEventListener(
       "resize",
@@ -124,7 +113,6 @@ const Header = () => {
       document.documentElement.classList.remove("dark");
     }
   }, []);
-
   const changeTheme = () => {
     setTheme(theme === "light" ? "dark" : "light");
     if (theme === "dark") {
@@ -134,6 +122,34 @@ const Header = () => {
       document.documentElement.classList.remove("dark");
       localStorage.setItem("theme", "light");
     }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const resetResults = () => {
+    setSearchResults([]);
+  };
+
+  const handleMovieClick = (id) => {
+    resetResults();
+    setResultsVisible(true);
+  };
+
+  const resetAndShowResults = () => {
+    resetResults();
+    setResultsVisible(true);
   };
 
   return (
@@ -181,37 +197,40 @@ const Header = () => {
                 >
                   <CiSearch />
                 </button>
-                <div className="!absolute left-2 top-[30px] z-50  text-black">
+                <div
+                  className={`absolute left-2 top-[30px] z-50 text-black ${
+                    resultsVisible ? "visible" : "hidden"
+                  }`}
+                >
                   {searchResults.length > 0 && (
                     <div className="mt-7 p-3 bg-gray-100 border rounded">
                       <ul>
-                        <div>
-                          {searchResults?.slice(0, 6).map((result) => (
-                            <li key={result.id} className="mb-2">
-                              <Link
-                                to={`/${
-                                  result.media_type === "tv" ? "tv" : "movies"
-                                }/${result.id}`}
-                                className="text-blue-500 hover:underline"
-                              >
-                                <div className="flex items-center">
-                                  <img
-                                    src={`https://image.tmdb.org/t/p/original/${
-                                      result.poster_path
-                                        ? result.poster_path
-                                        : result.backdrop_path
-                                    }`}
-                                    alt=""
-                                    className="w-12 rounded-md"
-                                  />
-                                  <h2 className="ml-2">
-                                    {result.title || result.name}
-                                  </h2>
-                                </div>
-                              </Link>
-                            </li>
-                          ))}
-                        </div>
+                        {searchResults?.slice(0, 6).map((result) => (
+                          <li key={result.id} className="mb-2">
+                            <Link
+                              to={`/${
+                                result.media_type === "tv" ? "tv" : "movies"
+                              }/${result.id}`}
+                              className="text-blue-500 hover:underline"
+                              onClick={() => handleMovieClick(result.id)}
+                            >
+                              <div className="flex items-center">
+                                <img
+                                  src={`https://image.tmdb.org/t/p/original/${
+                                    result.poster_path
+                                      ? result.poster_path
+                                      : result.backdrop_path
+                                  }`}
+                                  alt=""
+                                  className="w-12 rounded-md"
+                                />
+                                <h2 className="ml-2">
+                                  {result.title || result.name}
+                                </h2>
+                              </div>
+                            </Link>
+                          </li>
+                        ))}
                       </ul>
                     </div>
                   )}

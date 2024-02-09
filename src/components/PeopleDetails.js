@@ -62,10 +62,6 @@ const PeopleDetails = () => {
       },
     ],
   };
-  // const uniqueMovies = Array.from(new Set([...movieCredits.cast, ...movieCredits.crew].map(movie => movie.id)))
-  // .map(id => {
-  //   return [...movieCredits.cast, ...movieCredits.crew].find(movie => movie.id === id);
-  // });
   return (
    <div className="container mx-auto mt-10 p-4 overflow-hidden">
    {peopleData && (

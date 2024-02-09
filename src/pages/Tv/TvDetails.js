@@ -36,6 +36,8 @@ const TvDetails = () => {
   const [seasonData, setSeasonData] = useState([]);
   const [sortBy, setSortBy] = useState("sort");
   const [castData, setCastData] = useState({});
+  const [visibleSeasonCount, setVisibleSeasonCount] = useState(4);
+  const [showMore, setShowMore] = useState(true);
   const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
@@ -106,34 +108,67 @@ const TvDetails = () => {
   const handleSortChange = (value) => {
     setSortBy(value);
   };
-  const renderSeasons = () => {
-    let sortedSeasons = [...seasonData];
-
-    if (sortBy === "first_air_date.desc") {
-      sortedSeasons = sortedSeasons.sort(
-        (a, b) => new Date(b.air_date) - new Date(a.air_date)
-      );
-    } else if (sortBy === "first_air_date.asc") {
-      sortedSeasons = sortedSeasons.sort(
-        (a, b) => new Date(a.air_date) - new Date(b.air_date)
-      );
-    }
-    return sortedSeasons.map((season, index) => (
-      <div key={index} className="bg-gray-800 p-4 rounded-md lg:w-36">
-        <h3 className="md:text-1x1 lg:text-1xl font-bold text-white">
-          {season.name}
-        </h3>
-        {/* <p className="text-gray-400">Air Date: {season.air_date}</p> */}
-        <p className="text-gray-400 flex">Episode {season.episode_count}</p>
-        {/* <p className="text-gray-400">Vote Average: {season.vote_average}</p> */}
-        <div className="flex items-center">
-          <FaStar className="text-yellow-400" />
-          <span className="ml-1 text-white">{season.vote_average}</span>
-        </div>
-      </div>
-    ));
+  const handleShowMore = () => {
+    setVisibleSeasonCount(seasonData.length);
+    setShowMore(false);
   };
 
+  const handleShowLess = () => {
+    setVisibleSeasonCount(4);
+    setShowMore(true);
+  };
+const renderSeasons = () => {
+  let sortedSeasons = [...seasonData];
+  if (sortBy === "first_air_date.desc") {
+    sortedSeasons = sortedSeasons.sort(
+      (a, b) => new Date(b.air_date) - new Date(a.air_date)
+    );
+  } else if (sortBy === "first_air_date.asc") {
+    sortedSeasons = sortedSeasons.sort(
+      (a, b) => new Date(a.air_date) - new Date(b.air_date)
+    );
+  }
+  const visibleSeasons = sortedSeasons.slice(0, visibleSeasonCount);
+
+  return (
+    <>
+      {visibleSeasons.map((season, index) => (
+        <div key={index}>
+          <div className="bg-gray-800 p-4 rounded-md w-36 lg:w-36">
+            <h3 className="md:text-1x1 lg:text-1xl font-bold text-white">
+              {season.name}
+            </h3>
+            <p className="text-gray-400 flex">Episode {season.episode_count}</p>
+            <div className="flex items-center">
+              <FaStar className="text-yellow-400" />
+              <span className="ml-1 text-white">{season.vote_average}</span>
+            </div>
+          </div>
+        </div>
+      ))}
+      {showMore && sortedSeasons.length > visibleSeasonCount && (
+        <button
+          className="text-blue-500 hover:underline mt-2"
+          onClick={handleShowMore}
+        >
+          Show More
+        </button>
+      )}
+      {!showMore && (
+        <button
+          className="text-blue-500 hover:underline mt-2"
+          onClick={handleShowLess}
+        >
+          Show Less
+        </button>
+      )}
+    </>
+  );
+};
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [movieData]);
   const settings = {
     dots: false,
     infinite: true,
@@ -220,13 +255,25 @@ const TvDetails = () => {
                   />
                 ) : (
                   <div className="pt-5 max-w-80">
-                    <img
-                      className="rounded-xl details_img"
-                      src={`https://image.tmdb.org/t/p/original/${
-                        poster_path ? poster_path : backdrop_path
-                      }`}
-                      alt=""
-                    />
+                    {backdrop_path || poster_path ? (
+                      <div>
+                        <img
+                          className="h-96 object-cover rounded-2xl"
+                          width={500}
+                          height={450}
+                          src={`https://image.tmdb.org/t/p/original/${
+                            backdrop_path || poster_path
+                          }`}
+                        />
+                      </div>
+                    ) : (
+                      <img
+                        className="h-96 object-cover rounded-2xl"
+                        width={500}
+                        height={450}
+                        src={`https://m.media-amazon.com/images/I/61s8vyZLSzL.jpg`}
+                      />
+                    )}
                   </div>
                 )}
               </div>
@@ -396,12 +443,12 @@ const TvDetails = () => {
               </div>
             </div>
             <div className="similar-movies container mx-auto px-5 relative">
-              {loading ? (
-                ""
-              ) : (
+              {simMovData && simMovData.length > 0 ? (
                 <h1 className="dark:text-white px-1 py-5 font-bold text-2xl">
                   Similar Movies
                 </h1>
+              ) : (
+                ""
               )}
               <Slider {...settings2}>
                 {loading
@@ -415,18 +462,29 @@ const TvDetails = () => {
                       >
                         <Link to={`/tv/${dt.id}`}>
                           <div className="relative">
-                            <img
-                              className="h-64 object-cover rounded-2xl"
-                              width={500}
-                              height={450}
-                              src={`https://image.tmdb.org/t/p/original/${
-                                dt?.backdrop_path || dt?.poster_path
-                              }`}
-                            />
+                            {dt?.backdrop_path || dt?.poster_path ? (
+                              <div>
+                                <img
+                                  className="h-64 object-cover rounded-2xl"
+                                  width={500}
+                                  height={450}
+                                  src={`https://image.tmdb.org/t/p/original/${
+                                    dt?.backdrop_path || dt?.poster_path
+                                  }`}
+                                />
+                              </div>
+                            ) : (
+                              <img
+                                className="h-64 object-cover rounded-2xl"
+                                width={500}
+                                height={450}
+                                src={`https://m.media-amazon.com/images/I/61s8vyZLSzL.jpg`}
+                              />
+                            )}
                             <div className="absolute inset-0 bg-black opacity-50 rounded-2xl"></div>
                             <div className="absolute bottom-0 p-2 w-full h-full flex flex-col items-start justify-end transition-opacity">
                               <div className="text-2x1 font-bold">
-                                {dt?.title}
+                                {dt?.name}
                               </div>
                               <div className="flex items-center font-bold">
                                 {dt.release_date
@@ -438,7 +496,7 @@ const TvDetails = () => {
                                   }`}
                                 >
                                   {dt?.vote_average.toFixed(2)}
-                                  <FaStar className="ml-1 text-yellow-500" />{" "}
+                                  <FaStar className="ml-1 text-yellow-500" />
                                 </div>
                               </div>
                             </div>
