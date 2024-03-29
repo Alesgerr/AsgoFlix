@@ -205,7 +205,7 @@ const MovieCards = () => {
                 </div>
                 <div className="banner_img">
                   <img
-                    className="h-full w-full object-cover rounded-2xl absolute top-0 left-0"
+                    className="h-96 w-full object-cover rounded-2xl absolute top-0 left-0"
                     // width={1000}
                     // height={400}
                     src={`https://image.tmdb.org/t/p/original/${
@@ -219,7 +219,7 @@ const MovieCards = () => {
           </div>
         ))}
       </div>
-      <div className="actor-card">
+      <div className="actor-card mt-2">
         <h2 className="text-2xl p-1 font-bold mb-4 flex">Popular Actors</h2>
         <Slider {...settings2}>
           {loading

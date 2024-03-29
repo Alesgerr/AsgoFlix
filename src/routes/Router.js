@@ -14,33 +14,34 @@ import Login from "../pages/Login";
 import Profile from "../pages/Profile/Profile";
 import GenreMovies from "../pages/Genres/GenreMovies";
 import GenreTvSeries from "../pages/Genres/GenreTvSeries";
+import AddProduct from "../components/AddProduct";
 
 export default function Router() {
-   return(
-      <BrowserRouter>
-         <Routes>
+   return (
+     <BrowserRouter>
+       <Routes>
          <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="tv" element={<Tv />} />
-          <Route path="tv/:id" element={<TvDetails />} />
-          <Route path="movies" element={<Movies />} />
-          <Route path="movies/:id" element={<MoviesDetails />} />
-          <Route path="actor-details/:id" element={<PeopleDetails />} />
-          <Route path="categories" element={<Categories />} />
-          <Route path="genres/movies/:id" element={<GenreMovies />} />
-          <Route path="genres/tv-series/:id" element={<GenreTvSeries />} />
-          <Route path="profile" element={<Profile />} />
-          <Route path="sign-up" element={<Register />} />
-          <Route path="sign-in" element={<Login />} />
-          <Route path="sign-in/forgot-password" element={<ForgotPass />} />
-          <Route path="sign-up/forgot-password" element={<ForgotPass />} />
+           <Route index element={<Home />} />
+           <Route path="tv" element={<Tv />} />
+           <Route path="tv/:id" element={<TvDetails />} />
+           <Route path="movies" element={<Movies />} />
+           <Route path="movies/:id" element={<MoviesDetails />} />
+           <Route path="actor-details/:id" element={<PeopleDetails />} />
+           <Route path="categories" element={<Categories />} />
+           <Route path="genres/movies/:id" element={<GenreMovies />} />
+           <Route path="genres/tv-series/:id" element={<GenreTvSeries />} />
+           <Route path="profile" element={<Profile />} />
+           <Route path="sign-up" element={<Register />} />
+           <Route path="sign-in" element={<Login />} />
+           <Route path="sign-in/forgot-password" element={<ForgotPass />} />
+           <Route path="sign-up/forgot-password" element={<ForgotPass />} />
+           <Route path="add-product" element={<AddProduct />} />
 
-          {/* <Route path="movie/:id" element={<MovieDetails />} /> */}
-
+           {/* <Route path="movie/:id" element={<MovieDetails />} /> */}
          </Route>
-         </Routes>
-      </BrowserRouter>
-   )
+       </Routes>
+     </BrowserRouter>
+   );
 }
 const Layout = () => {
 

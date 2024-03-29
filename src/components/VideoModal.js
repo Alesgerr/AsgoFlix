@@ -1,6 +1,7 @@
 import React from "react";
 
 const VideoModal = ({ video, onClose }) => {
+  
   return (
    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black dark:bg-opacity-80" onClick={onClose}>
    <div className="rounded-lg overflow-hidden" onClick={(e) => e.stopPropagation()}>
