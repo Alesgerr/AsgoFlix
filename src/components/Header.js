@@ -156,7 +156,7 @@ const Header = () => {
     <Navbar
       className={`${
         openNav ? "dark:bg-black" : "bg-white"
-      } dark:text-white rounded-none bg-transparent ml-2 mr-2 mx-auto dark:shadow-gray-900 dark:shadow-sm shadow-md dark:border-hidden border-hidden text-black px-4 py-2 lg:px-8 lg:py-4 relative z-50`}
+      } dark:text-white rounded-none bg-transparent ml-2 mr-2 mx-auto dark:shadow-gray-900 dark:shadow-sm shadow dark:border-hidden border-hidden text-black px-4 py-2 lg:px-8 lg:py-4 relative z-50`}
     >
       <div className="container mx-auto flex flex-wrap lg:items-center justify-between text-blue-gray-900">
         <Typography

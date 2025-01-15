@@ -14,7 +14,7 @@ const VideoList = ({ videos }) => {
   };
   // const selectedVideos =
   //   videos && videos.length > 0 ? videos[1] || videos[2] : null;
-  const trailerVideo = videos.find((video) => video.type === "Trailer");
+  const trailerVideo = videos?.find((video) => video.type === "Trailer");
 
   const selectedVideos = trailerVideo ? trailerVideo : videos.slice(0, 1);
 

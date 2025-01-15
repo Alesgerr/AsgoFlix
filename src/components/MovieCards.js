@@ -141,39 +141,39 @@ const MovieCards = () => {
       },
     ],
   };
-   const settingsBanner = {
-     dots: true,
-     infinite: true,
-     speed: 500,
-     slidesToShow: 1,
-     slidesToScroll: 1,
-     responsive: [
-       {
-         breakpoint: 1024,
-         settings: {
-           slidesToShow: 1,
-           slidesToScroll: 1,
-           infinite: true,
-           dots: true,
-         },
-       },
-       {
-         breakpoint: 768,
-         settings: {
-           slidesToShow: 1,
-           slidesToScroll: 1,
-           initialSlide: 1,
-         },
-       },
-       {
-         breakpoint: 480,
-         settings: {
-           slidesToShow: 1,
-           slidesToScroll: 1,
-         },
-       },
-     ],
-   };
+  const settingsBanner = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          initialSlide: 1,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
   const openModal = () => {
     setModalOpen(true);
   };
@@ -184,7 +184,7 @@ const MovieCards = () => {
   };
   return (
     <div className="movies_cards overflow-hidden px-3 lg:px-0 ">
-      <div className="banner mt-2">
+      <div className="banner my-3">
         {popularMovies?.slice(0, 1).map((item, i) => (
           <div key={i}>
             <div className="relative bg-gradient-to-r p-10 h-96 text-white">
@@ -197,7 +197,7 @@ const MovieCards = () => {
                     Discover your favorite movies and TV series here.
                   </p>
                   <Link
-                    to="/categories" // İlgili linke yönlendirme yapın
+                    to="/categories"
                     className="bg-red-600 text-white font-semibold px-6 py-3 rounded-full hover:bg-red-700 transition duration-300"
                   >
                     Discover Now
@@ -219,8 +219,10 @@ const MovieCards = () => {
           </div>
         ))}
       </div>
-      <div className="actor-card mt-2">
-        <h2 className="text-2xl p-1 font-bold mb-4 flex">Popular Actors</h2>
+      <div className="actor-card mt-3">
+        <h2 className="text-2xl p-1 font-extrabold mb-4 flex">
+          Popular Actors
+        </h2>
         <Slider {...settings2}>
           {loading
             ? Array.from({ length: 6 }).map((_, index) => (
@@ -230,14 +232,12 @@ const MovieCards = () => {
                 <Link to={`/actor-details/${dt.id}`} key={i}>
                   <div className="relative cursor-pointer gap-2">
                     <div className="flex items-center justify-center rounded-full overflow-hidden">
-                      {dt.known_for.backdrop_path || dt.profile_path ? (
+                      {dt.profile_path ? (
                         <img
                           className="inset-0 h-24 w-24 object-cover rounded-full"
                           width={200}
                           height={200}
-                          src={`https://image.tmdb.org/t/p/original/${
-                            dt?.known_for.backdrop_path || dt?.profile_path
-                          }`}
+                          src={`https://image.tmdb.org/t/p/original/${dt?.profile_path}`}
                         />
                       ) : (
                         <img
@@ -258,8 +258,8 @@ const MovieCards = () => {
               ))}
         </Slider>
       </div>
-      <div className="movies-card mt-5">
-        <h2 className="text-2xl p-1 font-bold mb-4 flex">Top Rated</h2>
+      <div className="movies-card mt-10">
+        <h2 className="text-2xl p-1 font-extrabold mb-4 flex">Top Rated</h2>
         <Slider {...settings}>
           {loading
             ? Array.from({ length: 6 }).map((_, index) => (
@@ -299,8 +299,10 @@ const MovieCards = () => {
               ))}
         </Slider>
       </div>
-      <div className="movies-card mt-5">
-        <h2 className="text-2xl p-1 font-bold mb-4 flex">Tv Trend Series</h2>
+      <div className="movies-card mt-10">
+        <h2 className="text-2xl p-1 font-extrabold mb-4 flex">
+          Tv Trend Series
+        </h2>
         <Slider {...settings}>
           {loading
             ? Array.from({ length: 6 }).map((_, index) => (
@@ -342,8 +344,8 @@ const MovieCards = () => {
               ))}
         </Slider>
       </div>
-      <div className="movies-card mt-5 mb-5">
-        <h2 className="text-2xl p-1 font-bold mb-4 flex">Popular Films</h2>
+      <div className="movies-card mt-10">
+        <h2 className="text-2xl p-1 font-extrabold mb-4 flex">Popular Films</h2>
         <Slider {...settings}>
           {loading
             ? Array.from({ length: 6 }).map((_, index) => (
