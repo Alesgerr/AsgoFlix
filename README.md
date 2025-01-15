@@ -1,4 +1,4 @@
-Demo https://asgoflix.vercel.app/
+Demo https://asgo-flix.vercel.app
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
